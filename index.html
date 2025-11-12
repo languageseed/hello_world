@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World Blog - Language Seed</title>
+    
+    <!-- Inter & Montserrat Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --font-system: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            --font-display: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            
+            --bg-app: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-elevated: #f1f5f9;
+            --bg-header: #1e293b;
+            --bg-primary: #3b82f6;
+            --bg-secondary: #10b981;
+            --bg-accent: #f59e0b;
+            --bg-muted: #f3f4f6;
+            --bg-contrast: #7c3aed;
+            
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --text-link: #3b82f6;
+            --text-link-hover: #1d4ed8;
+            
+            --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            
+            --radius-sm: 0.75rem;
+            --radius-md: 1rem;
+            --radius-lg: 1.5rem;
+            --radius-xl: 2rem;
+            
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-system);
+            background: var(--bg-app);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        header {
+            background: var(--bg-header);
+            color: white;
+            padding: 48px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        header h1 {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .intro {
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-contrast));
+            color: white;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 48px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .intro h2 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .intro p {
+            font-size: 16px;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .post-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .post-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .post-card-header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 24px;
+            color: white;
+        }
+
+        .post-card-header h3 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .post-card-meta {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .post-card-body {
+            padding: 24px;
+        }
+
+        .post-card-excerpt {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .post-card-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--bg-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: all var(--transition-fast);
+        }
+
+        .post-card-link:hover {
+            background: var(--text-link-hover);
+            transform: scale(1.05);
+        }
+
+        .quick-start {
+            background: var(--bg-surface);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 48px;
+        }
+
+        .quick-start h2 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .quick-start ol {
+            padding-left: 24px;
+            line-height: 2;
+        }
+
+        .quick-start li {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .quick-start code {
+            background: var(--bg-elevated);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 14px;
+            color: var(--bg-contrast);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .feature-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .feature-card .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        footer {
+            background: var(--bg-elevated);
+            padding: 32px;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 64px;
+        }
+
+        footer p {
+            margin: 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 32px;
+            }
+
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌱 Hello World</h1>
+        <p>Notes to self, articles and content to share with others</p>
+    </header>
+
+    <div class="container">
+        <div class="intro">
+            <h2>Welcome to the Language Seed Blog!</h2>
+            <p>
+                This is a simple, beautiful, and powerful blog system built with Markdown and Mermaid support. 
+                Create stunning blog posts with rich formatting, diagrams, code snippets, and more - all from 
+                simple markdown files.
+            </p>
+        </div>
+
+        <h2 style="font-family: var(--font-display); font-size: 32px; margin-bottom: 24px;">Latest Posts</h2>
+        
+        <div class="posts-grid">
+            <!-- Example Post -->
+            <div class="post-card" onclick="window.location.href='posts/example-post.html'">
+                <div class="post-card-header">
+                    <h3>Welcome to Hello World - A Complete Guide</h3>
+                    <div class="post-card-meta">
+                        By Language Seed Team • November 12, 2025
+                    </div>
+                </div>
+                <div class="post-card-body">
+                    <p class="post-card-excerpt">
+                        Discover all the features of the Hello World blog system. Learn how to write posts 
+                        with Markdown, include beautiful images, create Mermaid diagrams, and publish your ideas.
+                    </p>
+                    <a href="posts/example-post.html" class="post-card-link">Read More →</a>
+                </div>
+            </div>
+
+            <!-- Add more post cards here as you create them -->
+        </div>
+
+        <div class="quick-start">
+            <h2>🚀 Quick Start Guide</h2>
+            <ol>
+                <li>Create a new markdown file (e.g., <code>my-post.md</code>)</li>
+                <li>Add frontmatter with title, author, and date</li>
+                <li>Write your content using Markdown syntax</li>
+                <li>Run: <code>python generate_post.py my-post.md</code></li>
+                <li>Your HTML post will be generated in the <code>posts/</code> folder</li>
+                <li>Add your post to this index page manually or use the update script</li>
+            </ol>
+        </div>
+
+        <h2 style="font-family: var(--font-display); font-size: 32px; margin-bottom: 24px;">✨ Features</h2>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">📝</div>
+                <h3>Markdown Support</h3>
+                <p>Write in simple Markdown with full GitHub Flavored Markdown support.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Mermaid Diagrams</h3>
+                <p>Create flowcharts, sequence diagrams, mind maps, and more with Mermaid.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🖼️</div>
+                <h3>Image Support</h3>
+                <p>Add images easily with automatic responsive sizing and beautiful styling.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">💻</div>
+                <h3>Code Highlighting</h3>
+                <p>Share code snippets with syntax highlighting for multiple languages.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🎨</div>
+                <h3>Beautiful Design</h3>
+                <p>Modern, clean design based on the Merman template with gorgeous typography.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📱</div>
+                <h3>Responsive</h3>
+                <p>Looks great on all devices - desktop, tablet, and mobile.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Language Seed - Hello World Blog</p>
+        <p>Powered by Markdown & Mermaid</p>
+    </footer>
+</body>
+</html>
+
