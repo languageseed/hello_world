@@ -88,11 +88,15 @@ Language_Seed_AI_Hello_World/
 ├── 🖼️ images/                 # Your images and media
 │   └── README.md
 │
+├── 🎵 audio/                  # Your audio files
+│   └── README.md
+│
 ├── 🎨 assets/                 # Additional assets (CSS, JS, etc.)
 │
 ├── 🛠️ scripts/                # Build and utility scripts
 │   ├── generate_post.py       # Post generator
-│   └── update_index.py        # Index helper
+│   ├── update_index.py        # Index helper
+│   └── convert_audio.py       # Audio converter (HQ MP3)
 │
 ├── 📐 templates/              # HTML templates
 │   └── template.html          # Blog post template

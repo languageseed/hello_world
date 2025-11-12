@@ -89,11 +89,36 @@ An upbeat electronic piece...
 
 ## Optimizing Audio Files
 
-Before uploading, optimize your audio:
+### 🚀 Automatic Conversion (Recommended!)
 
-### Using FFmpeg (Command Line)
+Use our built-in converter to automatically convert ALL audio files to HQ MP3 (320k stereo):
 
 ```bash
+# Preview what will be converted (dry run)
+python scripts/convert_audio.py --dry-run
+
+# Convert all audio files to HQ MP3 and remove originals
+python scripts/convert_audio.py
+
+# Convert without confirmation prompt
+python scripts/convert_audio.py --force
+```
+
+**What it does:**
+- ✅ Converts ALL audio files to MP3 320k stereo
+- ✅ Removes original files after successful conversion
+- ✅ Works with WAV, FLAC, AAC, OGG, WebM, M4A, AIFF, OPUS, and more
+- ✅ Ensures maximum quality (320k bitrate, 48kHz sample rate)
+- ✅ Processes subdirectories automatically
+
+### Manual FFmpeg Commands
+
+If you need specific control:
+
+```bash
+# Convert to HQ MP3 (320 kbps stereo)
+ffmpeg -i input.wav -ar 48000 -ac 2 -b:a 320k output.mp3
+
 # Convert to optimized MP3 (192 kbps)
 ffmpeg -i input.wav -codec:a libmp3lame -b:a 192k output.mp3
 
