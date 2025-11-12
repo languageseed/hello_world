@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merman - Markdown & Mermaid Scratchpad</title>
+    
+    <!-- Inter & Montserrat Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+    
+    <!-- Mermaid.js for diagram rendering -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+        });
+        window.mermaid = mermaid;
+    </script>
+    
+    <style>
+        :root {
+            /* BOOM Mixed Colors Theme - Typography */
+            --font-system: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            --font-display: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+            
+            /* Mixed Color Background System with Rainbow Elements */
+            --bg-app: #f8fafc;          /* Light neutral base */
+            --bg-surface: #ffffff;      /* Clean white for cards */
+            --bg-elevated: #f1f5f9;     /* Slightly blue-tinted elevated */
+            --bg-header: #1e293b;       /* Dark blue-gray header */
+            
+            /* Mixed Reserved Background Colors */
+            --bg-primary: #3b82f6;      /* Blue primary */
+            --bg-secondary: #10b981;    /* Green secondary */
+            --bg-accent: #f59e0b;       /* Amber accent */
+            --bg-muted: #f3f4f6;        /* Light gray muted */
+            --bg-subtle: #fef3c7;       /* Light amber subtle */
+            --bg-contrast: #7c3aed;     /* Purple contrast */
+            
+            /* Mixed Text Colors for Colorful Backgrounds */
+            --text-on-primary: #ffffff;    /* White on blue */
+            --text-on-secondary: #ffffff;  /* White on green */
+            --text-on-accent: #000000;     /* Black on amber */
+            --text-on-contrast: #ffffff;   /* White on purple */
+            
+            /* Mixed Color Text System */
+            --text-primary: #1f2937;    /* Dark gray */
+            --text-secondary: #4b5563;  /* Medium gray */
+            --text-muted: #9ca3af;      /* Light gray */
+            --text-on-color: #ffffff;   /* White on colors */
+            --text-accent: #7c3aed;     /* Purple accent text */
+            --text-link: #3b82f6;       /* Blue for links */
+            --text-link-hover: #1d4ed8; /* Darker blue on hover */
+            
+            /* Status Colors - Each Different Color */
+            --status-success: #10b981;  /* Green success */
+            --status-warning: #f59e0b;  /* Amber warning */
+            --status-error: #ef4444;    /* Red error */
+            --status-info: #3b82f6;     /* Blue info */
+            
+            /* BOOM Shadows - No borders */
+            --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
+            
+            /* BOOM Border Radius - Generous rounded */
+            --radius-sm: 0.75rem;       /* 12px */
+            --radius-md: 1rem;          /* 16px */
+            --radius-lg: 1.5rem;        /* 24px */
+            --radius-xl: 2rem;          /* 32px */
+            
+            /* Smooth Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-system);
+            background: var(--bg-app);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .container {
+            background: var(--bg-surface);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--bg-header);
+            color: white;
+            padding: 16px 24px;
+            text-align: center;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 13px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .header-links {
+            margin-top: 12px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-link {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .header-link:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .editor-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pane {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .pane.editor-pane {
+            width: 50%;
+        }
+
+        .pane.preview-pane {
+            flex: 1;
+        }
+
+        .splitter {
+            width: 6px;
+            background: var(--bg-muted);
+            cursor: col-resize;
+            position: relative;
+            flex-shrink: 0;
+            transition: all var(--transition-fast);
+        }
+
+        .splitter:hover {
+            background: var(--bg-primary);
+        }
+
+        .splitter::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .splitter:hover::after {
+            opacity: 1;
+        }
+
+        .pane-header {
+            background: var(--bg-elevated);
+            padding: 12px 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-bottom: none;
+            box-shadow: var(--shadow-xs);
+        }
+
+        #editor {
+            flex: 1;
+            padding: 32px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.7;
+            border: none;
+            resize: none;
+            outline: none;
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+
+        #preview {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            background: var(--bg-surface);
+        }
+
+        /* Markdown styling */
+        #preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6 {
+            margin-top: 32px;
+            margin-bottom: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        #preview h1 {
+            font-size: 2.25em;
+            border-bottom: 3px solid var(--bg-muted);
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+
+        #preview h2 {
+            font-size: 1.75em;
+            border-bottom: 2px solid var(--bg-muted);
+            padding-bottom: 10px;
+        }
+
+        #preview h3 { 
+            font-size: 1.4em;
+            color: var(--text-primary);
+        }
+        #preview h4 { 
+            font-size: 1.15em;
+            color: var(--text-primary);
+        }
+        #preview h5 { 
+            font-size: 1em;
+            color: var(--text-secondary);
+        }
+        #preview h6 { 
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #preview p {
+            margin-top: 0;
+            margin-bottom: 18px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        #preview code {
+            padding: 0.25em 0.5em;
+            margin: 0;
+            font-size: 0.9em;
+            background: var(--bg-elevated);
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            color: var(--text-accent);
+        }
+
+        #preview pre {
+            padding: 20px;
+            overflow: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            background: var(--bg-app);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        #preview pre code {
+            display: inline;
+            padding: 0;
+            margin: 0;
+            overflow: visible;
+            line-height: inherit;
+            background-color: transparent;
+            border: 0;
+            font-size: inherit;
+        }
+
+        #preview blockquote {
+            padding: 16px 24px;
+            color: var(--text-secondary);
+            border-left: 4px solid var(--bg-accent);
+            margin: 0 0 20px 0;
+            background: var(--bg-subtle);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+        }
+
+        #preview ul, #preview ol {
+            padding-left: 2em;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        #preview li {
+            margin-bottom: 0.5em;
+            color: var(--text-primary);
+        }
+
+        #preview table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 24px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        #preview table th,
+        #preview table td {
+            padding: 12px 16px;
+            border: none;
+        }
+
+        #preview table th {
+            background: var(--bg-elevated);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: left;
+        }
+
+        #preview table tr:nth-child(2n) {
+            background: var(--bg-app);
+        }
+        
+        #preview table tr {
+            transition: background var(--transition-fast);
+        }
+        
+        #preview table tr:hover {
+            background: var(--bg-muted);
+        }
+
+        #preview a {
+            color: var(--text-link);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+
+        #preview a:hover {
+            color: var(--text-link-hover);
+            text-decoration: underline;
+        }
+
+        #preview img {
+            max-width: 100%;
+            height: auto;
+            margin: 24px 0;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        #preview hr {
+            height: 2px;
+            padding: 0;
+            margin: 32px 0;
+            background: linear-gradient(90deg, var(--bg-primary), var(--bg-secondary), var(--bg-accent));
+            border: 0;
+            border-radius: 2px;
+        }
+
+        /* Mermaid diagrams */
+        #preview .mermaid {
+            margin: 32px 0;
+            padding: 24px;
+            text-align: center;
+            background: var(--bg-app);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .editor-container {
+                flex-direction: column;
+            }
+
+            #preview {
+                border-left: none;
+            }
+            
+            .pane.editor-pane {
+                width: 100%;
+                height: 50%;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            border: 3px solid var(--bg-muted);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-link-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐠 Merman</h1>
+            <p>Markdown & Mermaid Diagram Scratchpad</p>
+            <div class="header-links">
+                <a href="index.html" class="header-link">← Back to Blog</a>
+            </div>
+        </header>
+        
+        <div class="editor-container">
+            <div class="pane editor-pane">
+                <div class="pane-header">✏️ Editor</div>
+                <textarea id="editor" placeholder="Paste your markdown here...
+
+Try this example:
+
+# Hello World
+
+This is a **markdown** scratchpad with *Mermaid* support!
+
+## Example Mermaid Diagram
+
+\`\`\`mermaid
+graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Check console]
+    C --> E[End]
+    D --> E
+\`\`\`
+
+## Features
+
+- Real-time preview
+- Mermaid diagram rendering
+- Beautiful styling
+- Code syntax highlighting
+
+\`\`\`javascript
+console.log('Hello, World!');
+\`\`\`
+
+> This is a blockquote
+
+### List Example
+1. First item
+2. Second item
+3. Third item
+"></textarea>
+            </div>
+            
+            <div class="splitter" id="splitter"></div>
+            
+            <div class="pane preview-pane">
+                <div class="pane-header">👁️ Preview</div>
+                <div id="preview"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+        const splitter = document.getElementById('splitter');
+        const editorPane = document.querySelector('.editor-pane');
+        const container = document.querySelector('.editor-container');
+        
+        // Auto-wrap mermaid diagrams on paste
+        editor.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            
+            // Check if it looks like a mermaid diagram without backticks
+            const mermaidKeywords = [
+                'graph', 'flowchart', 'sequenceDiagram', 'classDiagram', 
+                'stateDiagram', 'erDiagram', 'gantt', 'pie', 'journey',
+                'gitGraph', 'C4Context', 'mindmap', 'timeline', 'quadrantChart'
+            ];
+            
+            const firstLine = pastedText.trim().split('\n')[0].trim();
+            const isMermaidSyntax = mermaidKeywords.some(keyword => 
+                firstLine.startsWith(keyword) || firstLine.includes(keyword)
+            );
+            
+            // Check if it's already wrapped in backticks
+            const hasBackticks = pastedText.trim().startsWith('```mermaid') || 
+                                pastedText.includes('```mermaid');
+            
+            let textToInsert = pastedText;
+            
+            // If it looks like mermaid but doesn't have backticks, wrap it
+            if (isMermaidSyntax && !hasBackticks) {
+                textToInsert = '```mermaid\n' + pastedText.trim() + '\n```';
+            }
+            
+            // Insert at cursor position
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const text = editor.value;
+            editor.value = text.substring(0, start) + textToInsert + text.substring(end);
+            
+            // Set cursor position after inserted text
+            const newPosition = start + textToInsert.length;
+            editor.selectionStart = editor.selectionEnd = newPosition;
+            
+            // Trigger update
+            updatePreview();
+        });
+        
+        // Splitter dragging functionality
+        let isDragging = false;
+        
+        splitter.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const newWidth = e.clientX - containerRect.left;
+            const containerWidth = containerRect.width;
+            
+            // Set minimum and maximum widths (20% to 80%)
+            const minWidth = containerWidth * 0.2;
+            const maxWidth = containerWidth * 0.8;
+            
+            if (newWidth >= minWidth && newWidth <= maxWidth) {
+                const percentage = (newWidth / containerWidth) * 100;
+                editorPane.style.width = percentage + '%';
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        });
+        
+        // Configure marked options
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+        });
+
+        let updateTimeout;
+        
+        async function updatePreview() {
+            const markdown = editor.value;
+            
+            // Parse markdown to HTML
+            let html = marked.parse(markdown);
+            
+            // Replace mermaid code blocks with div elements
+            html = html.replace(
+                /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
+                '<div class="mermaid">$1</div>'
+            );
+            
+            // Update preview
+            preview.innerHTML = html;
+            
+            // Render mermaid diagrams with error handling
+            if (window.mermaid) {
+                const mermaidElements = preview.querySelectorAll('.mermaid');
+                
+                for (const element of mermaidElements) {
+                    try {
+                        // Remove any existing data-processed attribute
+                        element.removeAttribute('data-processed');
+                        
+                        // Try to render the diagram
+                        await mermaid.run({
+                            nodes: [element],
+                        });
+                    } catch (error) {
+                        // Display error message in a nice format
+                        console.error('Mermaid rendering error:', error);
+                        
+                        element.innerHTML = `
+                            <div style="
+                                background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+                                border-left: 4px solid #ef4444;
+                                padding: 20px;
+                                border-radius: 12px;
+                                font-family: var(--font-system);
+                                color: #991b1b;
+                                box-shadow: var(--shadow-md);
+                                max-width: 100%;
+                                overflow-x: auto;
+                            ">
+                                <div style="
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    margin-bottom: 12px;
+                                    font-weight: 700;
+                                    font-size: 16px;
+                                ">
+                                    <span style="font-size: 24px;">⚠️</span>
+                                    Mermaid Syntax Error
+                                </div>
+                                <div style="
+                                    font-size: 14px;
+                                    line-height: 1.6;
+                                    margin-bottom: 12px;
+                                    color: #7f1d1d;
+                                ">
+                                    ${error.message || 'Invalid mermaid diagram syntax'}
+                                </div>
+                                <div style="
+                                    background: #fff;
+                                    border: 1px solid #fca5a5;
+                                    padding: 12px;
+                                    border-radius: 8px;
+                                    font-family: var(--font-mono);
+                                    font-size: 13px;
+                                    color: #dc2626;
+                                    white-space: pre-wrap;
+                                    word-break: break-word;
+                                ">
+${element.textContent}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        }
+        
+        // Update preview on input with debouncing
+        editor.addEventListener('input', () => {
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(updatePreview, 300);
+        });
+        
+        // Initial render
+        updatePreview();
+        
+        // Save to localStorage
+        editor.addEventListener('input', () => {
+            localStorage.setItem('markdownContent', editor.value);
+        });
+        
+        // Load from localStorage on page load
+        window.addEventListener('load', () => {
+            const savedContent = localStorage.getItem('markdownContent');
+            if (savedContent) {
+                editor.value = savedContent;
+                updatePreview();
+            }
+        });
+    </script>
+</body>
+</html>
+
