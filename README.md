@@ -2,6 +2,8 @@
 
 **Language Seed's Blog** - Notes to self, articles and content to share with others.
 
+**🌐 Live Blog:** [https://languageseed.github.io/hello_world/](https://languageseed.github.io/hello_world/)
+
 A beautiful, simple blog system powered by Markdown and Mermaid diagrams, based on the Merman template.
 
 ## ✨ Features
