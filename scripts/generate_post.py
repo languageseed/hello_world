@@ -10,6 +10,10 @@ import re
 from datetime import datetime
 from pathlib import Path
 
+# Get the project root directory (parent of scripts/)
+SCRIPT_DIR = Path(__file__).parent
+PROJECT_ROOT = SCRIPT_DIR.parent
+
 def read_file(filepath):
     """Read file contents"""
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -57,15 +61,29 @@ def escape_markdown_for_js(content):
     content = content.replace('${', '\\${')   # Escape template literals
     return content
 
-def generate_post(markdown_file, output_file=None, template_file='template.html'):
+def generate_post(markdown_file, output_file=None, template_file=None):
     """Generate HTML blog post from markdown file"""
     
-    # Read markdown file
-    if not os.path.exists(markdown_file):
+    # Convert to Path object and resolve
+    markdown_path = Path(markdown_file)
+    if not markdown_path.is_absolute():
+        # Try relative to current directory first
+        if markdown_path.exists():
+            markdown_path = markdown_path.resolve()
+        else:
+            # Try relative to project root
+            alt_path = PROJECT_ROOT / markdown_path
+            if alt_path.exists():
+                markdown_path = alt_path
+            else:
+                print(f"Error: Markdown file '{markdown_file}' not found")
+                sys.exit(1)
+    
+    if not markdown_path.exists():
         print(f"Error: Markdown file '{markdown_file}' not found")
         sys.exit(1)
     
-    markdown_content = read_file(markdown_file)
+    markdown_content = read_file(markdown_path)
     
     # Extract frontmatter and content
     metadata, content = extract_frontmatter(markdown_content)
@@ -75,8 +93,13 @@ def generate_post(markdown_file, output_file=None, template_file='template.html'
     author = metadata.get('author', 'Language Seed')
     date = metadata.get('date', datetime.now().strftime('%Y-%m-%d'))
     
-    # Read template
-    if not os.path.exists(template_file):
+    # Find template file
+    if template_file is None:
+        template_file = PROJECT_ROOT / 'templates' / 'template.html'
+    else:
+        template_file = Path(template_file)
+    
+    if not template_file.exists():
         print(f"Error: Template file '{template_file}' not found")
         sys.exit(1)
     
@@ -94,15 +117,25 @@ def generate_post(markdown_file, output_file=None, template_file='template.html'
     # Determine output file
     if output_file is None:
         # Generate from markdown filename
-        base_name = Path(markdown_file).stem
-        output_file = f'posts/{base_name}.html'
+        base_name = markdown_path.stem
+        output_file = PROJECT_ROOT / 'posts' / f'{base_name}.html'
+    else:
+        output_file = Path(output_file)
+        if not output_file.is_absolute():
+            output_file = PROJECT_ROOT / output_file
     
     # Ensure posts directory exists
-    os.makedirs('posts', exist_ok=True)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     
     # Write output
     write_file(output_file, html)
-    print(f"✅ Generated: {output_file}")
+    # Make output path relative to project root for display
+    try:
+        display_path = output_file.relative_to(PROJECT_ROOT)
+    except ValueError:
+        display_path = output_file
+    
+    print(f"✅ Generated: {display_path}")
     print(f"   Title: {title}")
     print(f"   Author: {author}")
     print(f"   Date: {date}")
@@ -110,10 +143,12 @@ def generate_post(markdown_file, output_file=None, template_file='template.html'
 def main():
     """Main function"""
     if len(sys.argv) < 2:
-        print("Usage: python generate_post.py <markdown_file> [output_file]")
-        print("\nExample:")
-        print("  python generate_post.py my-post.md")
-        print("  python generate_post.py my-post.md posts/custom-name.html")
+        print("Usage: python scripts/generate_post.py <markdown_file> [output_file]")
+        print("\nExamples:")
+        print("  python scripts/generate_post.py content/my-post.md")
+        print("  python scripts/generate_post.py content/my-post.md posts/custom-name.html")
+        print("\nFrom scripts directory:")
+        print("  python generate_post.py ../content/my-post.md")
         sys.exit(1)
     
     markdown_file = sys.argv[1]

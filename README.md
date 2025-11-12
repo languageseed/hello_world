@@ -18,7 +18,13 @@ A beautiful, simple blog system powered by Markdown and Mermaid diagrams, based 
 
 ### 1. Create a New Blog Post
 
-Create a markdown file (e.g., `my-first-post.md`) with frontmatter:
+Create a markdown file in the `content/` folder:
+
+```bash
+nano content/my-first-post.md
+```
+
+Add frontmatter and content:
 
 ```markdown
 ---
@@ -50,7 +56,7 @@ graph TD
 Run the generator script:
 
 ```bash
-python generate_post.py my-first-post.md
+python scripts/generate_post.py content/my-first-post.md
 ```
 
 This will create `posts/my-first-post.html`.
@@ -63,16 +69,36 @@ Open the generated HTML file in your browser, or add it to `index.html` to list 
 
 ```
 Language_Seed_AI_Hello_World/
-├── index.html              # Main blog index page
-├── template.html           # Blog post template
-├── generate_post.py        # Post generator script
-├── example-post.md         # Example markdown post
-├── README.md              # This file
-├── posts/                 # Generated HTML posts
-│   └── example-post.html
-├── images/                # Your images
-│   └── (place images here)
-└── assets/                # Other assets (CSS, JS, etc.)
+├── 📄 index.html              # Main blog index page
+├── 📖 README.md               # This file
+├── 🔧 .gitignore              # Git ignore rules
+│
+├── 📝 content/                # Your markdown posts (SOURCE)
+│   ├── 2025-11-12-getting-started.md
+│   ├── example-post.md
+│   └── test-mermaid.md
+│
+├── 📄 posts/                  # Generated HTML (OUTPUT)
+│   ├── 2025-11-12-getting-started.html
+│   ├── example-post.html
+│   └── test-mermaid.html
+│
+├── 🖼️ images/                 # Your images and media
+│   └── README.md
+│
+├── 🎨 assets/                 # Additional assets (CSS, JS, etc.)
+│
+├── 🛠️ scripts/                # Build and utility scripts
+│   ├── generate_post.py       # Post generator
+│   └── update_index.py        # Index helper
+│
+├── 📐 templates/              # HTML templates
+│   └── template.html          # Blog post template
+│
+└── 📚 docs/                   # Documentation
+    ├── DEPLOYMENT.md          # Deployment guide
+    ├── QUICK_START.md         # Quick start guide
+    └── POST_WORKFLOW.md       # Post workflow details
 ```
 
 ## 📝 Writing Posts
@@ -220,18 +246,24 @@ No other dependencies needed - everything uses CDN-hosted libraries!
 
 ### Generate a post:
 ```bash
-python generate_post.py my-post.md
+python scripts/generate_post.py content/my-post.md
 ```
 
 ### Generate with custom output:
 ```bash
-python generate_post.py my-post.md posts/custom-name.html
+python scripts/generate_post.py content/my-post.md posts/custom-name.html
 ```
 
-### Make script executable:
+### Create and generate a new post:
 ```bash
-chmod +x generate_post.py
-./generate_post.py my-post.md
+# Create the post
+nano content/2025-11-13-new-post.md
+
+# Generate it
+python scripts/generate_post.py content/2025-11-13-new-post.md
+
+# Preview
+open posts/2025-11-13-new-post.html
 ```
 
 ## 🤝 Contributing
