@@ -139,6 +139,8 @@ def generate_post(markdown_file, output_file=None, template_file=None):
     print(f"   Title: {title}")
     print(f"   Author: {author}")
     print(f"   Date: {date}")
+    
+    return True
 
 def main():
     """Main function"""
@@ -149,12 +151,42 @@ def main():
         print("  python scripts/generate_post.py content/my-post.md posts/custom-name.html")
         print("\nFrom scripts directory:")
         print("  python generate_post.py ../content/my-post.md")
+        print("\nOptions:")
+        print("  --no-index    Skip auto-updating index.html")
         sys.exit(1)
     
-    markdown_file = sys.argv[1]
-    output_file = sys.argv[2] if len(sys.argv) > 2 else None
+    # Check for flags
+    auto_update_index = True
+    args = sys.argv[1:]
     
-    generate_post(markdown_file, output_file)
+    if '--no-index' in args:
+        auto_update_index = False
+        args.remove('--no-index')
+    
+    markdown_file = args[0]
+    output_file = args[1] if len(args) > 1 else None
+    
+    # Generate the post
+    success = generate_post(markdown_file, output_file)
+    
+    if success and auto_update_index:
+        # Auto-update index.html
+        print("\n📋 Updating index.html...")
+        import subprocess
+        try:
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT_DIR / 'update_index.py'), '--auto'],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True
+            )
+            if result.returncode == 0:
+                print("✅ Index updated successfully!")
+            else:
+                print("⚠️  Index update failed (you can update manually with: python scripts/update_index.py)")
+        except Exception as e:
+            print(f"⚠️  Could not auto-update index: {e}")
+            print("   Run manually: python scripts/update_index.py")
 
 if __name__ == '__main__':
     main()
