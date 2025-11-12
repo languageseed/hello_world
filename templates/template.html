@@ -13,6 +13,9 @@
     <!-- Marked.js for Markdown parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     
+    <!-- Howler.js for audio playback -->
+    <script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+    
     <!-- Mermaid.js for diagram rendering -->
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -406,6 +409,137 @@
             border-radius: var(--radius-md);
         }
 
+        /* Audio player support */
+        article .audio-player {
+            margin: 32px 0;
+            padding: 24px;
+            background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-app) 100%);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+
+        article .audio-player:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        article .audio-player-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        article .audio-player-title::before {
+            content: "🎵";
+            font-size: 20px;
+        }
+
+        article .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        article .audio-play-button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            transition: all var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+        }
+
+        article .audio-play-button:hover {
+            background: var(--text-link-hover);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        article .audio-play-button:active {
+            transform: scale(0.95);
+        }
+
+        article .audio-progress-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        article .audio-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-muted);
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        article .audio-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--bg-primary), var(--bg-secondary));
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        article .audio-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
+        article .audio-volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+
+        article .audio-volume-icon {
+            font-size: 18px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        article .audio-volume-slider {
+            flex: 1;
+            height: 4px;
+            background: var(--bg-muted);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        article .audio-volume-fill {
+            height: 100%;
+            background: var(--bg-primary);
+            border-radius: 2px;
+            width: 100%;
+            transition: width 0.1s ease;
+        }
+
+        /* Native audio fallback (hidden when custom player loads) */
+        article audio {
+            width: 100%;
+            margin: 32px 0;
+            display: none;
+        }
+
         /* Responsive design */
         @media (max-width: 768px) {
             article {
@@ -534,6 +668,147 @@
                     }
                 }
             }
+            
+            // Initialize audio players
+            if (window.Howl) {
+                initializeAudioPlayers();
+            }
+        }
+        
+        function initializeAudioPlayers() {
+            const article = document.getElementById('content');
+            const audioElements = article.querySelectorAll('audio');
+            
+            audioElements.forEach((audioEl, index) => {
+                const src = audioEl.getAttribute('src');
+                const title = audioEl.getAttribute('data-title') || `Audio ${index + 1}`;
+                
+                if (!src) return;
+                
+                // Create player container
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'audio-player';
+                playerDiv.innerHTML = `
+                    <div class="audio-player-title">${title}</div>
+                    <div class="audio-controls">
+                        <button class="audio-play-button" data-audio-id="${index}">▶</button>
+                        <div class="audio-progress-container">
+                            <div class="audio-progress-bar" data-audio-id="${index}">
+                                <div class="audio-progress-fill"></div>
+                            </div>
+                            <div class="audio-time">
+                                <span class="audio-current-time">0:00</span>
+                                <span class="audio-duration">0:00</span>
+                            </div>
+                        </div>
+                        <div class="audio-volume-control">
+                            <span class="audio-volume-icon" data-audio-id="${index}">🔊</span>
+                            <div class="audio-volume-slider" data-audio-id="${index}">
+                                <div class="audio-volume-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Replace audio element with player
+                audioEl.parentNode.replaceChild(playerDiv, audioEl);
+                
+                // Initialize Howler
+                const sound = new Howl({
+                    src: [src],
+                    html5: true,
+                    onload: function() {
+                        const duration = sound.duration();
+                        const durationEl = playerDiv.querySelector('.audio-duration');
+                        durationEl.textContent = formatTime(duration);
+                    },
+                    onplay: function() {
+                        const btn = playerDiv.querySelector('.audio-play-button');
+                        btn.textContent = '⏸';
+                        updateProgress();
+                    },
+                    onpause: function() {
+                        const btn = playerDiv.querySelector('.audio-play-button');
+                        btn.textContent = '▶';
+                    },
+                    onend: function() {
+                        const btn = playerDiv.querySelector('.audio-play-button');
+                        btn.textContent = '▶';
+                        const fill = playerDiv.querySelector('.audio-progress-fill');
+                        fill.style.width = '0%';
+                    }
+                });
+                
+                // Store sound instance
+                playerDiv._howler = sound;
+                
+                // Play/pause button
+                const playBtn = playerDiv.querySelector('.audio-play-button');
+                playBtn.addEventListener('click', () => {
+                    if (sound.playing()) {
+                        sound.pause();
+                    } else {
+                        sound.play();
+                    }
+                });
+                
+                // Progress bar click
+                const progressBar = playerDiv.querySelector('.audio-progress-bar');
+                progressBar.addEventListener('click', (e) => {
+                    const rect = progressBar.getBoundingClientRect();
+                    const percent = (e.clientX - rect.left) / rect.width;
+                    const duration = sound.duration();
+                    sound.seek(duration * percent);
+                });
+                
+                // Volume control
+                const volumeIcon = playerDiv.querySelector('.audio-volume-icon');
+                const volumeSlider = playerDiv.querySelector('.audio-volume-slider');
+                const volumeFill = playerDiv.querySelector('.audio-volume-fill');
+                
+                volumeIcon.addEventListener('click', () => {
+                    if (sound.volume() > 0) {
+                        sound.volume(0);
+                        volumeFill.style.width = '0%';
+                        volumeIcon.textContent = '🔇';
+                    } else {
+                        sound.volume(1);
+                        volumeFill.style.width = '100%';
+                        volumeIcon.textContent = '🔊';
+                    }
+                });
+                
+                volumeSlider.addEventListener('click', (e) => {
+                    const rect = volumeSlider.getBoundingClientRect();
+                    const percent = (e.clientX - rect.left) / rect.width;
+                    sound.volume(percent);
+                    volumeFill.style.width = (percent * 100) + '%';
+                    volumeIcon.textContent = percent > 0 ? '🔊' : '🔇';
+                });
+                
+                // Update progress
+                function updateProgress() {
+                    if (sound.playing()) {
+                        const seek = sound.seek();
+                        const duration = sound.duration();
+                        const percent = (seek / duration) * 100;
+                        
+                        const fill = playerDiv.querySelector('.audio-progress-fill');
+                        const currentTime = playerDiv.querySelector('.audio-current-time');
+                        
+                        fill.style.width = percent + '%';
+                        currentTime.textContent = formatTime(seek);
+                        
+                        requestAnimationFrame(updateProgress);
+                    }
+                }
+            });
+        }
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return mins + ':' + (secs < 10 ? '0' : '') + secs;
         }
         
         // Wait for Mermaid to be ready, then render
