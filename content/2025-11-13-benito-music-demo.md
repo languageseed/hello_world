@@ -10,27 +10,7 @@ Welcome to the audio demo page! Listen to these original compositions using our 
 
 ---
 
-## Track 1: Granita Dance
-
-<audio src="../audio/Benito - Granita Dance.mp3" data-title="Granita Dance - Original Composition"></audio>
-
-It's hot, I'm melting, and I want a granita to cool me down.
-
-Generic House Music Jam out of the MC-707 into Ableton for a mix-down and arranging.
-
-**Production Details:**
-- Roland MC-707
-- Arturia KeyStep
-- Mixed and arranged in Ableton
-
-**Format:**
-- MP3 320k Stereo
-- Quality: High Fidelity
-- Genre: House/Electronic
-
----
-
-## Track 2: Sketches - Rebel with a DAW
+## Track 1: Sketches - Rebel with a DAW
 
 <audio src="../audio/Benito - Sketches - Rebel with a DAW.mp3" data-title="Sketches - Rebel with a DAW"></audio>
 
@@ -49,6 +29,26 @@ This track was inspired by the Victims, a Perth Band from the 70's - go check th
 - MP3 320k Stereo
 - Quality: High Fidelity
 - Genre: Punk Rock/Electronic
+
+---
+
+## Track 2: Granita Dance
+
+<audio src="../audio/Benito - Granita Dance.mp3" data-title="Granita Dance - Original Composition"></audio>
+
+It's hot, I'm melting, and I want a granita to cool me down.
+
+Generic House Music Jam out of the MC-707 into Ableton for a mix-down and arranging.
+
+**Production Details:**
+- Roland MC-707
+- Arturia KeyStep
+- Mixed and arranged in Ableton
+
+**Format:**
+- MP3 320k Stereo
+- Quality: High Fidelity
+- Genre: House/Electronic
 
 ---
 
