@@ -17,7 +17,7 @@ AUDIO_DIR = PROJECT_ROOT / 'audio'
 # Supported input formats
 SUPPORTED_FORMATS = [
     '.wav', '.flac', '.aac', '.ogg', '.webm', '.m4a', 
-    '.wma', '.aiff', '.opus', '.oga', '.mp3'
+    '.wma', '.aiff', '.aif', '.opus', '.oga', '.mp3'
 ]
 
 # FFmpeg settings for HQ MP3
