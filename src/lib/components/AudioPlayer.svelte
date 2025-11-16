@@ -35,9 +35,8 @@
 
   // Resolve audio path with base path and properly encode URL segments
   $: audioSrc = (() => {
-    // Always use /hello_world as base path for GitHub Pages
-    const basePath = '/hello_world';
-    const fullPath = src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+    // Use base from $app/paths (empty in dev, /hello_world in prod)
+    const fullPath = src.startsWith('/') ? `${base}${src}` : `${base}/${src}`;
     const segments = fullPath.split('/').filter(s => s);
     const encoded = segments.map((seg) => {
       if (seg.includes(' ') || seg.includes('%') || seg.match(/[^a-zA-Z0-9._-]/)) {
@@ -79,14 +78,18 @@
     } else {
       // Set this as the currently playing audio
       currentPlayingId.set(playerId);
-      audioElement.play().then(() => {
-        playing = true;
-        updateProgress();
-      }).catch((error) => {
-        console.error('Play failed:', error);
-        loadError = true;
-        currentPlayingId.set(null);
-      });
+      
+      const playPromise = audioElement.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          playing = true;
+          updateProgress();
+        }).catch((error) => {
+          console.error('Audio playback error:', error);
+          loadError = true;
+          currentPlayingId.set(null);
+        });
+      }
     }
   }
 
@@ -123,7 +126,6 @@
 
   // Update audio src when audioSrc changes
   $: if (audioElement && audioSrc) {
-    console.log('Setting audio src:', audioSrc);
     audioElement.src = audioSrc;
     loadError = false;
   }
@@ -132,11 +134,9 @@
     if (audioElement) {
       // Set src explicitly
       audioElement.src = audioSrc;
-      console.log('Audio element mounted with src:', audioSrc, 'base:', base);
       
       audioElement.addEventListener('loadedmetadata', () => {
         duration = audioElement.duration || 0;
-        console.log('Audio metadata loaded:', { duration, audioSrc, actualSrc: audioElement.src });
       });
 
       audioElement.addEventListener('timeupdate', () => {
@@ -155,8 +155,7 @@
         currentPlayingId.set(null);
       });
 
-      audioElement.addEventListener('error', (e) => {
-        console.error('Audio error:', e, 'src:', audioElement.src, 'audioSrc:', audioSrc, 'base:', base);
+      audioElement.addEventListener('error', () => {
         loadError = true;
       });
 
@@ -210,20 +209,23 @@
         src={audioSrc}
         preload="metadata"
         style="display: none;"
-        on:error={(e) => {
-          console.error('Audio element error:', e, 'src:', audioSrc, 'base:', base);
+        on:error={() => {
           loadError = true;
         }}
       ></audio>
       
       <div class="flex items-center gap-4">
-        <Button variant="default" size="icon" on:click={togglePlay}>
+        <button 
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-900 text-white hover:bg-gray-800 h-10 w-10"
+          on:click={togglePlay}
+          type="button"
+        >
           {#if playing}
             <Pause class="w-5 h-5" />
           {:else}
             <Play class="w-5 h-5" />
           {/if}
-        </Button>
+        </button>
         
         <div class="flex-1">
           <Slider
@@ -240,13 +242,17 @@
           </div>
         </div>
         
-        <Button variant="ghost" size="icon" on:click={toggleMute}>
-          {#if muted}
-            <VolumeX class="w-5 h-5" />
-          {:else}
-            <Volume2 class="w-5 h-5" />
-          {/if}
-        </Button>
+          <button 
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-gray-100 hover:text-gray-900 h-10 w-10"
+            on:click={toggleMute}
+            type="button"
+          >
+            {#if muted}
+              <VolumeX class="w-5 h-5" />
+            {:else}
+              <Volume2 class="w-5 h-5" />
+            {/if}
+          </button>
       </div>
     {/if}
   </CardContent>

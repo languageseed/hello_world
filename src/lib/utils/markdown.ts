@@ -47,10 +47,13 @@ export function processMarkdown(content: string): {
     }
   }
   
-  // Process in reverse order to maintain indices
+  // Process in reverse order to maintain indices when replacing text
   matches.reverse().forEach(({ match, index }) => {
     const src = match[1].replace('../audio/', '/audio/');
     const title = match[2] || `Track ${audioIndex + 1}`;
+    
+    // Use the ORIGINAL match index for the marker, not audioIndex
+    const markerIndex = matches.length - 1 - audioIndex;
     
     audioTags.unshift({ 
       src, 
@@ -60,7 +63,7 @@ export function processMarkdown(content: string): {
     
     // Replace with placeholder that will survive markdown processing
     processedContent = processedContent.substring(0, index) + 
-      `\n\n<!--AUDIO_${audioIndex}-->\n\n` + 
+      `\n\n<!--AUDIO_${markerIndex}-->\n\n` + 
       processedContent.substring(index + match[0].length);
     
     audioIndex++;
