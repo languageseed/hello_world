@@ -9,6 +9,8 @@
   import CardTitle from './ui/card-title.svelte';
   import CardContent from './ui/card-content.svelte';
   import { Play, Pause, Volume2, VolumeX } from 'lucide-svelte';
+  import { currentPlayingId } from '$lib/stores/audioStore';
+  import { get } from 'svelte/store';
 
   interface AudioPlayerProps {
     src: string;
@@ -19,6 +21,9 @@
   export let src: string;
   export let title: string;
   export let description: string = '';
+
+  // Generate unique ID for this player instance
+  const playerId = `audio-${Math.random().toString(36).substr(2, 9)}`;
 
   let sound: Howl | null = null;
   let playing = false;
@@ -64,6 +69,14 @@
       },
       onplay: (id) => {
         console.log('Audio playing:', id);
+        // Pause any other currently playing audio
+        const currentId = get(currentPlayingId);
+        if (currentId && currentId !== playerId) {
+          // Another audio is playing - it will pause itself when it detects the change
+          console.log('Another audio is playing, it will pause automatically');
+        }
+        // Set this as the currently playing audio
+        currentPlayingId.set(playerId);
         playing = true;
         updateProgress();
       },
@@ -82,6 +95,11 @@
       },
       onpause: () => {
         console.log('Audio paused');
+        // Clear the current playing ID if this was the active player
+        const currentId = get(currentPlayingId);
+        if (currentId === playerId) {
+          currentPlayingId.set(null);
+        }
         playing = false;
       },
       onend: () => {
@@ -104,7 +122,22 @@
     sound.load();
   });
 
+  // Subscribe to currentPlayingId changes to pause if another audio starts
+  const unsubscribe = currentPlayingId.subscribe((currentId) => {
+    if (currentId !== playerId && playing && sound) {
+      console.log('Another audio started, pausing this one');
+      sound.pause();
+      playing = false;
+    }
+  });
+
   onDestroy(() => {
+    unsubscribe();
+    // Clear the current playing ID if this was the active player
+    const currentId = get(currentPlayingId);
+    if (currentId === playerId) {
+      currentPlayingId.set(null);
+    }
     sound?.unload();
   });
 
