@@ -68,8 +68,17 @@
         updateProgress();
       },
       onplayerror: (id, error) => {
-        console.error('Play error:', error, { id, audioSrc });
-        loadError = true;
+        console.warn('Play error (may need unlock):', error, { id, audioSrc });
+        // Handle browser audio unlock - wait for unlock event then retry
+        if (sound) {
+          sound.once('unlock', () => {
+            console.log('Audio unlocked, retrying play');
+            const soundId = sound?.play();
+            if (soundId) {
+              console.log('Play successful after unlock:', soundId);
+            }
+          });
+        }
       },
       onpause: () => {
         console.log('Audio paused');
@@ -123,23 +132,12 @@
       sound.pause();
     } else {
       console.log('Attempting to play audio:', audioSrc);
-      // Ensure audio is loaded before playing
-      if (duration === 0) {
-        console.log('Duration is 0, waiting for load...');
-        sound.once('load', () => {
-          console.log('Audio loaded, now playing');
-          duration = sound.duration();
-          const soundId = sound.play();
-          console.log('Play called, soundId:', soundId);
-        });
-        sound.load();
-      } else {
-        const soundId = sound.play();
-        console.log('Play called, soundId:', soundId, 'playing state:', sound.playing());
-        if (soundId === undefined) {
-          console.error('Failed to play audio:', audioSrc);
-          loadError = true;
-        }
+      // Try to play - if it fails, onplayerror will handle unlock
+      const soundId = sound.play();
+      console.log('Play called, soundId:', soundId);
+      if (soundId === undefined) {
+        console.warn('Play returned undefined - may need user interaction unlock');
+        // The onplayerror handler will catch this and wait for unlock
       }
     }
   }
