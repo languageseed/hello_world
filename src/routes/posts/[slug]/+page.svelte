@@ -37,7 +37,7 @@
   </header>
 
   <!-- Post Content -->
-  <article>
+  <article class="bg-white border border-gray-200 rounded-md p-8 shadow-sm">
     <MarkdownContent content={post.content} />
   </article>
 </div>
