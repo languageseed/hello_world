@@ -35,7 +35,9 @@
 
   // Resolve audio path with base path and properly encode URL segments
   $: audioSrc = (() => {
-    const fullPath = src.startsWith('/') ? `${base}${src}` : `${base}/${src}`;
+    // Ensure base path is included
+    const basePath = base || '/hello_world';
+    const fullPath = src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
     const segments = fullPath.split('/').filter(s => s);
     const encoded = segments.map((seg) => {
       if (seg.includes(' ') || seg.includes('%') || seg.match(/[^a-zA-Z0-9._-]/)) {
@@ -43,7 +45,9 @@
       }
       return seg;
     });
-    return '/' + encoded.join('/');
+    const result = '/' + encoded.join('/');
+    console.log('Calculated audioSrc:', { src, base, basePath, fullPath, result });
+    return result;
   })();
 
   function updateProgress() {
