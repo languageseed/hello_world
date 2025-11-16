@@ -50,16 +50,11 @@
   let loadError = false;
 
   onMount(() => {
-    // Increase HTML5 audio pool size to handle multiple players
-    if (typeof Howl !== 'undefined' && Howl.ctx) {
-      Howl.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    }
-    
     console.log('AudioPlayer mounting:', { src, audioSrc, base });
     sound = new Howl({
       src: [audioSrc],
       html5: false, // Use Web Audio API instead of HTML5 to avoid pool exhaustion
-      preload: true,
+      preload: 'metadata', // Only preload metadata, not full audio
       onload: () => {
         console.log('Audio loaded successfully:', audioSrc);
         duration = sound?.duration() || 0;

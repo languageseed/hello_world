@@ -14,17 +14,37 @@ export function processMarkdown(content: string): {
   const audioTags: AudioTag[] = [];
   
   // Extract audio tags before processing markdown
+  // But exclude audio tags inside code blocks (```code blocks or indented code)
   const audioRegex = /<audio src="([^"]+)"[^>]*data-title="([^"]*)"[^>]*><\/audio>/g;
   let match;
   let processedContent = content;
   let audioIndex = 0;
   
-  // Find all audio tags and their positions
+  // Find all audio tags and their positions, but exclude those in code blocks
   const matches: Array<{ match: RegExpMatchArray; index: number }> = [];
-  let searchIndex = 0;
+  
+  // Check if a position is inside a code block
+  const isInCodeBlock = (pos: number, content: string): boolean => {
+    const beforePos = content.substring(0, pos);
+    // Check for markdown code blocks (```)
+    const codeBlockMatches = beforePos.match(/```/g);
+    if (codeBlockMatches && codeBlockMatches.length % 2 !== 0) {
+      return true; // Inside a code block
+    }
+    // Check for indented code blocks (4+ spaces at start of line)
+    const lines = beforePos.split('\n');
+    const currentLine = lines[lines.length - 1];
+    if (currentLine.match(/^    /)) {
+      return true; // Inside indented code block
+    }
+    return false;
+  };
   
   while ((match = audioRegex.exec(content)) !== null) {
-    matches.push({ match, index: match.index });
+    // Only add if not inside a code block
+    if (!isInCodeBlock(match.index, content)) {
+      matches.push({ match, index: match.index });
+    }
   }
   
   // Process in reverse order to maintain indices
