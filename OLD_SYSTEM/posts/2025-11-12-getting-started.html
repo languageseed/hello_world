@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Language Seed Blog - Hello World Blog</title>
+    
+    <!-- Inter & Montserrat Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+    
+    <!-- Mermaid.js for diagram rendering -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+        });
+        window.mermaid = mermaid;
+        window.mermaidReady = true;
+        // Trigger render if content is already loaded
+        if (window.contentReadyToRender) {
+            window.contentReadyToRender();
+        }
+    </script>
+    
+    <style>
+        :root {
+            /* BOOM Mixed Colors Theme - Typography */
+            --font-system: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            --font-display: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+            
+            /* Mixed Color Background System with Rainbow Elements */
+            --bg-app: #f8fafc;          /* Light neutral base */
+            --bg-surface: #ffffff;      /* Clean white for cards */
+            --bg-elevated: #f1f5f9;     /* Slightly blue-tinted elevated */
+            --bg-header: #1e293b;       /* Dark blue-gray header */
+            
+            /* Mixed Reserved Background Colors */
+            --bg-primary: #3b82f6;      /* Blue primary */
+            --bg-secondary: #10b981;    /* Green secondary */
+            --bg-accent: #f59e0b;       /* Amber accent */
+            --bg-muted: #f3f4f6;        /* Light gray muted */
+            --bg-subtle: #fef3c7;       /* Light amber subtle */
+            --bg-contrast: #7c3aed;     /* Purple contrast */
+            
+            /* Mixed Text Colors for Colorful Backgrounds */
+            --text-on-primary: #ffffff;    /* White on blue */
+            --text-on-secondary: #ffffff;  /* White on green */
+            --text-on-accent: #000000;     /* Black on amber */
+            --text-on-contrast: #ffffff;   /* White on purple */
+            
+            /* Mixed Color Text System */
+            --text-primary: #1f2937;    /* Dark gray */
+            --text-secondary: #4b5563;  /* Medium gray */
+            --text-muted: #9ca3af;      /* Light gray */
+            --text-on-color: #ffffff;   /* White on colors */
+            --text-accent: #7c3aed;     /* Purple accent text */
+            --text-link: #3b82f6;       /* Blue for links */
+            --text-link-hover: #1d4ed8; /* Darker blue on hover */
+            
+            /* Status Colors - Each Different Color */
+            --status-success: #10b981;  /* Green success */
+            --status-warning: #f59e0b;  /* Amber warning */
+            --status-error: #ef4444;    /* Red error */
+            --status-info: #3b82f6;     /* Blue info */
+            
+            /* BOOM Shadows - No borders */
+            --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
+            
+            /* BOOM Border Radius - Generous rounded */
+            --radius-sm: 0.75rem;       /* 12px */
+            --radius-md: 1rem;          /* 16px */
+            --radius-lg: 1.5rem;        /* 24px */
+            --radius-xl: 2rem;          /* 32px */
+            
+            /* Smooth Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-system);
+            background: var(--bg-app);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .container {
+            background: var(--bg-app);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--bg-header);
+            color: white;
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        header h1 {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .blog-meta {
+            background: var(--bg-elevated);
+            padding: 16px 24px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--bg-muted);
+        }
+
+        .blog-meta .date {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .blog-meta .author {
+            color: var(--text-accent);
+            font-weight: 500;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 24px;
+            padding: 12px 24px;
+            background: var(--bg-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .back-link:hover {
+            background: var(--text-link-hover);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        article {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            background: var(--bg-surface);
+            box-shadow: var(--shadow-lg);
+            border-radius: var(--radius-lg);
+            margin-top: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Markdown styling */
+        article h1, article h2, article h3, article h4, article h5, article h6 {
+            margin-top: 32px;
+            margin-bottom: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            font-family: var(--font-display);
+        }
+
+        article h1 {
+            font-size: 2.5em;
+            border-bottom: 3px solid var(--bg-muted);
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+
+        article h2 {
+            font-size: 2em;
+            border-bottom: 2px solid var(--bg-muted);
+            padding-bottom: 10px;
+        }
+
+        article h3 { 
+            font-size: 1.5em;
+            color: var(--text-primary);
+        }
+        article h4 { 
+            font-size: 1.25em;
+            color: var(--text-primary);
+        }
+        article h5 { 
+            font-size: 1.1em;
+            color: var(--text-secondary);
+        }
+        article h6 { 
+            font-size: 1em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        article p {
+            margin-top: 0;
+            margin-bottom: 18px;
+            line-height: 1.8;
+            color: var(--text-primary);
+            font-size: 17px;
+        }
+
+        article code {
+            padding: 0.25em 0.5em;
+            margin: 0;
+            font-size: 0.9em;
+            background: var(--bg-elevated);
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            color: var(--text-accent);
+        }
+
+        article pre {
+            padding: 20px;
+            overflow: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            background: var(--bg-app);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        article pre code {
+            display: inline;
+            padding: 0;
+            margin: 0;
+            overflow: visible;
+            line-height: inherit;
+            background-color: transparent;
+            border: 0;
+            font-size: inherit;
+            color: var(--text-primary);
+        }
+
+        article blockquote {
+            padding: 20px 28px;
+            color: var(--text-secondary);
+            border-left: 4px solid var(--bg-accent);
+            margin: 24px 0;
+            background: var(--bg-subtle);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            font-style: italic;
+            font-size: 1.05em;
+        }
+
+        article ul, article ol {
+            padding-left: 2em;
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        article li {
+            margin-bottom: 0.5em;
+            color: var(--text-primary);
+        }
+
+        article table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 24px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        article table th,
+        article table td {
+            padding: 12px 16px;
+            border: none;
+        }
+
+        article table th {
+            background: var(--bg-elevated);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: left;
+        }
+
+        article table tr:nth-child(2n) {
+            background: var(--bg-app);
+        }
+        
+        article table tr {
+            transition: background var(--transition-fast);
+        }
+        
+        article table tr:hover {
+            background: var(--bg-muted);
+        }
+
+        article a {
+            color: var(--text-link);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+
+        article a:hover {
+            color: var(--text-link-hover);
+            text-decoration: underline;
+        }
+
+        article img {
+            max-width: 100%;
+            height: auto;
+            margin: 32px 0;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            display: block;
+        }
+
+        /* Image with caption support */
+        article .image-container {
+            margin: 32px 0;
+            text-align: center;
+        }
+
+        article .image-container img {
+            margin: 0 auto 12px;
+        }
+
+        article .image-caption {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 12px;
+        }
+
+        article hr {
+            height: 2px;
+            padding: 0;
+            margin: 48px 0;
+            background: linear-gradient(90deg, var(--bg-primary), var(--bg-secondary), var(--bg-accent));
+            border: 0;
+            border-radius: 2px;
+        }
+
+        /* Mermaid diagrams */
+        article .mermaid {
+            margin: 32px 0;
+            padding: 24px;
+            text-align: center;
+            background: var(--bg-app);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Video support */
+        article video {
+            max-width: 100%;
+            height: auto;
+            margin: 32px 0;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Responsive iframes (for YouTube, etc) */
+        article .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            margin: 32px 0;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+        }
+
+        article .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: var(--radius-md);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            article {
+                margin: 16px;
+                padding: 24px 16px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            article h1 {
+                font-size: 2em;
+            }
+
+            article h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            border: 3px solid var(--bg-muted);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-link-hover);
+        }
+
+        footer {
+            background: var(--bg-elevated);
+            padding: 32px;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 48px;
+        }
+
+        footer p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 Hello World</h1>
+            <p>Language Seed Blog - Notes, Articles & Ideas</p>
+        </header>
+
+        <a href="../index.html" class="back-link">← Back to All Posts</a>
+        
+        <div class="blog-meta">
+            <span class="date">2025-11-12</span> • 
+            <span class="author">By language seed</span>
+        </div>
+        
+        <article id="content">
+            <!-- Content will be inserted here -->
+        </article>
+
+        <footer>
+            <p>&copy; 2025 Language Seed - Hello World Blog</p>
+            <p>Powered by Markdown & Mermaid</p>
+        </footer>
+    </div>
+
+    <script>
+        // Markdown content will be inserted here
+        const markdownContent = `# Getting Started with Language Seed Blog
+
+Welcome to my new blog! This is my first real post where I'll share my thoughts and ideas.
+
+## Why I Started This Blog
+
+I wanted a simple, beautiful way to share my knowledge and experiences. This blog system gives me:
+
+- 📝 **Easy writing** with Markdown
+- 🎨 **Beautiful design** out of the box
+- 📊 **Powerful diagrams** with Mermaid
+- 🚀 **Free hosting** on GitHub Pages
+
+## My Workflow
+
+Here's how I write a new post:
+
+\`\`\`mermaid
+graph LR
+    A[Have an Idea] --> B[Write Markdown]
+    B --> C[Add Images/Diagrams]
+    C --> D[Generate HTML]
+    D --> E[Push to GitHub]
+    E --> F[Live in Minutes!]
+    
+    style A fill:#3b82f6,color:#fff
+    style F fill:#10b981,color:#fff
+\`\`\`
+
+## What I'll Write About
+
+I'm planning to cover topics like:
+
+1. **Technology** - Programming, tools, and workflows
+2. **Learning** - Notes on things I'm studying
+3. **Projects** - Updates on what I'm building
+4. **Ideas** - Random thoughts and musings
+
+## Example Code
+
+I can easily share code snippets:
+
+\`\`\`python
+def hello_world():
+    """A simple greeting function"""
+    print("Hello from Language Seed!")
+    return "Welcome to my blog"
+
+# Let's call it
+message = hello_world()
+\`\`\`
+
+And JavaScript too:
+
+\`\`\`javascript
+const blog = {
+    name: "Hello World",
+    author: "Language Seed",
+    topics: ["tech", "learning", "ideas"],
+    isAwesome: true
+};
+
+console.log(\`Welcome to \${blog.name}!\`);
+\`\`\`
+
+## Visual Elements
+
+I can include all kinds of visual elements to make posts engaging.
+
+### Tables
+
+| Feature | Available | Notes |
+|---------|-----------|-------|
+| Markdown | ✅ | Full GFM support |
+| Diagrams | ✅ | Mermaid.js |
+| Images | ✅ | In images/ folder |
+| Videos | ✅ | Embed support |
+| Math | 🚧 | Could add KaTeX |
+
+### Lists
+
+My top 3 favorite things about this setup:
+
+1. **Simplicity** - Just write markdown files
+2. **Speed** - Generate and deploy in seconds
+3. **Beauty** - Professional design without effort
+
+### Quotes
+
+> "The best time to start was yesterday. The next best time is now."
+> 
+> — Ancient Proverb
+
+## System Architecture
+
+Here's how the blog system works under the hood:
+
+\`\`\`mermaid
+graph TD
+    A[Write Markdown] --> B[generate_post.py]
+    B --> C[Read Frontmatter]
+    B --> D[Read Content]
+    C --> E[template.html]
+    D --> E
+    E --> F[Replace Placeholders]
+    F --> G[posts/your-post.html]
+    G --> H[Git Push]
+    H --> I[GitHub Pages]
+    I --> J[Live Blog! 🎉]
+    
+    style A fill:#3b82f6,color:#fff
+    style E fill:#f59e0b,color:#000
+    style J fill:#10b981,color:#fff
+\`\`\`
+
+## Next Steps
+
+In my next posts, I'll dive deeper into:
+
+- How to customize the blog design
+- Advanced Mermaid diagram techniques
+- Adding custom features
+- SEO optimization for GitHub Pages
+
+Stay tuned! 🚀
+
+---
+
+## Resources
+
+- [My GitHub](https://github.com/languageseed)
+- [Markdown Guide](https://www.markdownguide.org/)
+- [Mermaid Docs](https://mermaid.js.org/)
+
+*Published on November 12, 2025*
+
+`;
+        
+        // Configure marked options
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+        });
+
+        async function renderContent() {
+            const article = document.getElementById('content');
+            
+            // Parse markdown to HTML
+            let html = marked.parse(markdownContent);
+            
+            // Replace mermaid code blocks with div elements
+            html = html.replace(
+                /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
+                '<div class="mermaid">$1</div>'
+            );
+            
+            // Update article content
+            article.innerHTML = html;
+            
+            // Render mermaid diagrams with error handling
+            if (window.mermaid) {
+                const mermaidElements = article.querySelectorAll('.mermaid');
+                
+                for (const element of mermaidElements) {
+                    try {
+                        element.removeAttribute('data-processed');
+                        await mermaid.run({
+                            nodes: [element],
+                        });
+                    } catch (error) {
+                        console.error('Mermaid rendering error:', error);
+                        element.innerHTML = `
+                            <div style="
+                                background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+                                border-left: 4px solid #ef4444;
+                                padding: 20px;
+                                border-radius: 12px;
+                                color: #991b1b;
+                            ">
+                                <div style="font-weight: 700; margin-bottom: 8px;">⚠️ Mermaid Syntax Error</div>
+                                <div style="font-size: 14px;">${error.message || 'Invalid diagram syntax'}</div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        }
+        
+        // Wait for Mermaid to be ready, then render
+        async function initRender() {
+            // Wait for Mermaid to load
+            let attempts = 0;
+            while (!window.mermaidReady && attempts < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+            }
+            
+            if (window.mermaidReady) {
+                await renderContent();
+            } else {
+                console.warn('Mermaid failed to load, rendering without diagrams');
+                await renderContent();
+            }
+        }
+        
+        // Store reference for module to call if it loads first
+        window.contentReadyToRender = initRender;
+        
+        // Start render when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initRender);
+        } else {
+            initRender();
+        }
+    </script>
+</body>
+</html>
+

@@ -4,25 +4,35 @@
 
 **🌐 Live Blog:** [https://languageseed.github.io/hello_world/](https://languageseed.github.io/hello_world/)
 
-A beautiful, simple blog system powered by Markdown and Mermaid diagrams, based on the Merman template.
+A beautiful, modern blog system built with **SvelteKit**, **shadcn-svelte**, and **Lucide icons**, powered by Markdown and Mermaid diagrams.
 
 ## ✨ Features
 
-- 📝 **Markdown Support** - Write posts in simple, clean Markdown
+- 📝 **Markdown Support** - Write posts in simple, clean Markdown with full GFM support
 - 📊 **Mermaid Diagrams** - Create flowcharts, sequence diagrams, mind maps, and more
-- 🖼️ **Images & Media** - Easily add images, videos, and other media
+- 🖼️ **Images & Media** - Easily add images with automatic responsive sizing
 - 🎵 **Audio Players** - Beautiful Howler.js-powered audio players with play, seek, and volume controls
 - 💻 **Code Highlighting** - Beautiful syntax highlighting for code blocks
-- 🎨 **Gorgeous Design** - Modern, responsive design with beautiful typography
-- ⚡ **Fast & Simple** - Static HTML generation, no complex setup needed
+- 🎨 **Modern UI** - Built with shadcn-svelte components and Lucide SVG icons
+- ⚡ **Fast & Static** - Pre-rendered static site for GitHub Pages
 - 📱 **Responsive** - Looks great on desktop, tablet, and mobile
-- 🐠 **Merman Scratchpad** - Built-in Markdown & Mermaid preview tool for quick testing
-- 🔄 **Auto-Index Update** - Index automatically updates when you generate posts
+- 🐠 **Merman Scratchpad** - Built-in Markdown & Mermaid preview tool
 - 🎼 **Audio Converter** - FFmpeg-powered HQ MP3 converter (320k stereo)
 
 ## 🚀 Quick Start
 
-### 1. Create a New Blog Post
+### Prerequisites
+
+- **Node.js** 18+ and npm
+- **Git** for version control
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Create a New Blog Post
 
 Create a markdown file in the `content/` folder:
 
@@ -52,41 +62,114 @@ print("Hello, World!")
 \`\`\`mermaid
 graph TD
     A[Start] --> B[Write Post]
-    B --> C[Generate HTML]
-    C --> D[Publish!]
+    B --> C[Build Site]
+    C --> D[Deploy!]
 \`\`\`
+
+## Adding Audio
+
+<audio src="../audio/my-track.mp3" data-title="My Track Title"></audio>
 ```
 
-### 2. Generate the HTML
-
-Run the generator script:
+### 3. Build the Site
 
 ```bash
-python scripts/generate_post.py content/my-first-post.md
+npm run build
 ```
 
-This will create `posts/my-first-post.html`.
+This generates a static site in the `build/` folder, ready for GitHub Pages!
 
-### 3. View Your Post
+### 4. Preview Locally
 
-Open the generated HTML file in your browser. The index automatically updates with your new post!
+```bash
+npm run preview
+```
 
-## 🛠️ Utility Tools
+Visit `http://localhost:4173/hello_world/` to see your site.
 
-### Merman Scratchpad
+### 5. Deploy to GitHub Pages
+
+```bash
+# Build the site
+npm run build
+
+# Commit and push
+git add build/
+git commit -m "Build site"
+git push
+```
+
+The `build/` folder contains all static files ready for GitHub Pages!
+
+## 🛠️ Development
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+Visit `http://localhost:5173` to see your site with hot reload.
+
+### Project Structure
+
+```
+Language_Seed_AI_Hello_World/
+├── content/              # Markdown blog posts
+├── static/              # Static assets (audio, images)
+│   ├── audio/          # Audio files
+│   └── images/         # Images
+├── src/
+│   ├── lib/
+│   │   ├── components/  # Svelte components
+│   │   │   ├── ui/      # shadcn components
+│   │   │   ├── AudioPlayer.svelte
+│   │   │   ├── MarkdownContent.svelte
+│   │   │   └── PostCard.svelte
+│   │   └── utils/       # Utilities
+│   └── routes/          # SvelteKit routes
+│       ├── +page.svelte # Index page
+│       ├── posts/[slug]/ # Dynamic post routes
+│       └── merman/       # Scratchpad page
+├── build/               # Generated static site (git ignored)
+└── OLD_SYSTEM/          # Archived Python-based system
+```
+
+## 🎨 UI Components
+
+This blog uses **shadcn-svelte** components:
+
+- **Card** - Post cards and feature tiles
+- **Button** - Navigation and actions
+- **Badge** - Tags and labels
+- **Slider** - Audio progress bars
+
+All styled with **Tailwind CSS** and enhanced with **Lucide SVG icons**.
+
+## 🐠 Merman Scratchpad
 
 Quick Markdown & Mermaid preview tool:
+
 ```bash
-# Open in browser
-open merman.html
-# Or visit: https://languageseed.github.io/hello_world/merman.html
+# Visit in browser after building
+npm run build
+npm run preview
+# Navigate to /hello_world/merman
 ```
 
-Use it to test diagrams and markdown before adding to posts!
+Or visit: [https://languageseed.github.io/hello_world/merman](https://languageseed.github.io/hello_world/merman)
 
-### Audio Converter
+Features:
+- Live Markdown preview
+- Mermaid diagram rendering
+- localStorage persistence
+- Copy to clipboard
+- Download as markdown
+
+## 🎼 Audio Converter
 
 Convert all audio files to HQ MP3 (320k stereo):
+
 ```bash
 # Preview what will be converted
 python scripts/convert_audio.py --dry-run
@@ -98,349 +181,212 @@ python scripts/convert_audio.py
 python scripts/convert_audio.py --force
 ```
 
-Supports: WAV, FLAC, AAC, OGG, WebM, M4A, AIFF, AIF, OPUS, MP3
-
-### Index Updater
-
-The index updates automatically when you generate posts! Manual update if needed:
-```bash
-python scripts/update_index.py
-```
-
-## 📁 Directory Structure
-
-```
-Language_Seed_AI_Hello_World/
-├── 📄 index.html              # Main blog index page
-├── 🐠 merman.html             # Markdown & Mermaid scratchpad utility
-├── 📖 README.md               # This file
-├── 🔧 .gitignore              # Git ignore rules
-│
-├── 📝 content/                # Your markdown posts (SOURCE)
-│   ├── 2025-11-12-getting-started.md
-│   ├── example-post.md
-│   └── test-mermaid.md
-│
-├── 📄 posts/                  # Generated HTML (OUTPUT)
-│   ├── 2025-11-12-getting-started.html
-│   ├── example-post.html
-│   └── test-mermaid.html
-│
-├── 🖼️ images/                 # Your images and media
-│   └── README.md
-│
-├── 🎵 audio/                  # Your audio files
-│   └── README.md
-│
-├── 🎨 assets/                 # Additional assets (CSS, JS, etc.)
-│
-├── 🛠️ scripts/                # Build and utility scripts
-│   ├── generate_post.py       # Post generator
-│   ├── update_index.py        # Index helper
-│   └── convert_audio.py       # Audio converter (HQ MP3)
-│
-├── 📐 templates/              # HTML templates
-│   └── template.html          # Blog post template
-│
-└── 📚 docs/                   # Documentation
-    ├── DEPLOYMENT.md          # Deployment guide
-    ├── QUICK_START.md         # Quick start guide
-    ├── POST_WORKFLOW.md       # Post workflow details
-    ├── NEW_WORKFLOW.md        # Auto-index workflow
-    ├── AUDIO_GUIDE.md         # Audio playback guide
-    └── AUDIO_CONVERTER_GUIDE.md # FFmpeg converter guide
-```
+**Supported formats:** `.wav`, `.flac`, `.aac`, `.ogg`, `.webm`, `.m4a`, `.wma`, `.aiff`, `.aif`, `.opus`, `.oga`, `.mp3`
 
 ## 📝 Writing Posts
 
 ### Frontmatter
 
-Every post should start with YAML frontmatter:
+Every post needs frontmatter:
 
-```markdown
+```yaml
 ---
-title: Your Post Title
-author: Your Name
+title: Post Title
+author: Author Name
 date: 2025-11-12
 ---
 ```
 
-### Markdown Syntax
+### Markdown Features
 
-You can use all standard Markdown features:
+- **Headers** - `# H1`, `## H2`, `### H3`
+- **Bold** - `**bold**`
+- **Italic** - `*italic*`
+- **Links** - `[text](url)`
+- **Images** - `![alt](path/to/image.jpg)`
+- **Code blocks** - Triple backticks with language
+- **Lists** - `- item` or `1. item`
 
-- **Bold** text: `**bold**`
-- *Italic* text: `*italic*`
-- `Inline code`: `` `code` ``
-- Links: `[text](url)`
-- Images: `![alt](path/to/image.jpg)`
-- Lists, tables, blockquotes, and more!
+### Mermaid Diagrams
 
-### Adding Images
-
-1. Place your images in the `images/` folder
-2. Reference them in your markdown:
-
-```markdown
-![My Image](../images/my-image.jpg)
-```
-
-Images will automatically be:
-- Responsive and properly sized
-- Beautifully styled with rounded corners and shadows
-- Optimized for all devices
-
-### Creating Diagrams
-
-Use Mermaid syntax for diagrams:
+Use code blocks with `mermaid` language:
 
 ````markdown
 ```mermaid
 graph TD
-    A[Start] --> B{Decision}
-    B -->|Yes| C[Action 1]
-    B -->|No| D[Action 2]
+    A[Start] --> B[Process]
+    B --> C[End]
 ```
 ````
 
-Supported diagram types:
-- Flowcharts (`graph` or `flowchart`)
-- Sequence diagrams (`sequenceDiagram`)
-- Class diagrams (`classDiagram`)
-- State diagrams (`stateDiagram`)
-- ER diagrams (`erDiagram`)
-- Gantt charts (`gantt`)
-- Pie charts (`pie`)
-- Mind maps (`mindmap`)
-- And more!
+### Audio Players
 
-### Code Blocks
+Add audio players using HTML tags:
 
-Use fenced code blocks with language specification:
-
-````markdown
-```python
-def hello():
-    print("Hello, World!")
+```html
+<audio src="../audio/track.mp3" data-title="Track Title"></audio>
 ```
-````
 
-````markdown
+The path should be relative to the `static/audio/` folder (use `/audio/track.mp3` in markdown).
+
+## 🔧 Configuration
+
+### GitHub Pages Base Path
+
+The site is configured for GitHub Pages at `/hello_world/`. To change this:
+
+1. Update `svelte.config.js`:
 ```javascript
-const greeting = "Hello, World!";
-console.log(greeting);
-```
-````
-
-### Adding Audio
-
-1. Place your audio files in the `audio/` folder
-2. Use HTML5 audio tag in your markdown:
-
-```markdown
-<audio src="../audio/my-song.mp3" data-title="My Song Title"></audio>
-```
-
-Audio features:
-- Beautiful custom Howler.js players
-- Play/pause, seek, volume controls
-- Progress bar with time display
-- Mobile-responsive design
-- Supports MP3, WebM, OGG, WAV, AAC, FLAC
-
-**Convert to HQ MP3 (320k stereo):**
-```bash
-python scripts/convert_audio.py
-```
-
-See `docs/AUDIO_GUIDE.md` for complete documentation.
-
-## 🐠 Merman Scratchpad Utility
-
-Built-in Markdown & Mermaid preview tool for quick testing!
-
-**Access:** Visit `merman.html` or click the button on the blog index
-
-**Features:**
-- Real-time Markdown and Mermaid preview
-- Split-pane interface (editor + preview)
-- Auto-save to browser localStorage
-- Draggable splitter
-- Auto-wraps pasted Mermaid diagrams
-- Perfect for testing before adding to posts
-
-**Use it to:**
-- Test Mermaid diagram syntax
-- Preview markdown formatting
-- Draft content quickly
-- Experiment with layouts
-- Learn Mermaid syntax
-
-**Live URL:** [https://languageseed.github.io/hello_world/merman.html](https://languageseed.github.io/hello_world/merman.html)
-
-## 🎨 Customization
-
-### Modify the Template
-
-Edit `template.html` to customize:
-- Colors (CSS variables in `:root`)
-- Fonts
-- Layout
-- Styling
-
-### Add Custom CSS
-
-Add custom styles in the `<style>` section of `template.html`.
-
-### Change Colors
-
-All colors are defined as CSS variables:
-
-```css
-:root {
-    --bg-primary: #3b82f6;      /* Blue */
-    --bg-secondary: #10b981;    /* Green */
-    --bg-accent: #f59e0b;       /* Amber */
-    --text-primary: #1f2937;    /* Dark gray */
-    /* ... and more */
+paths: {
+  base: '/your-repo-name'
 }
 ```
 
-## 🌐 Publishing
+2. Rebuild: `npm run build`
 
-### Option 1: GitHub Pages
+### Tailwind Theme
 
-1. Push your repository to GitHub
-2. Go to Settings → Pages
-3. Select your branch and save
-4. Your blog will be live at `https://yourusername.github.io/hello_world`
+Customize colors in `tailwind.config.js`:
 
-### Option 2: Any Static Host
-
-Upload the following to your web host:
-- `index.html`
-- `posts/` folder
-- `images/` folder
-- `assets/` folder
-
-### Option 3: Local Viewing
-
-Simply open `index.html` in your web browser to view locally.
-
-## 📚 Example Post
-
-Check out `example-post.md` and the generated `posts/example-post.html` to see all features in action!
-
-## 🛠️ Requirements
-
-### Essential
-- Python 3.6+ (for the generator scripts)
-- A modern web browser (for viewing)
-
-### Optional (for audio features)
-- FFmpeg (for audio conversion to HQ MP3)
-  ```bash
-  # macOS
-  brew install ffmpeg
-  
-  # Ubuntu
-  sudo apt install ffmpeg
-  ```
-
-**Note:** All web libraries (Marked.js, Mermaid.js, Howler.js) are loaded from CDN - no installation needed!
-
-## 📖 Usage Examples
-
-### Generate a post:
-```bash
-python scripts/generate_post.py content/my-post.md
+```javascript
+colors: {
+  primary: '#3b82f6',    // Blue
+  secondary: '#10b981',  // Green
+  accent: '#f59e0b',     // Amber
+  contrast: '#7c3aed',   // Purple
+}
 ```
 
-### Generate with custom output:
+## 📦 Dependencies
+
+### Core
+- **SvelteKit** - Framework
+- **@sveltejs/adapter-static** - Static site generation
+- **Tailwind CSS** - Styling
+- **shadcn-svelte** - UI components
+- **Lucide Svelte** - Icons
+
+### Content
+- **marked** - Markdown parsing
+- **gray-matter** - Frontmatter parsing
+- **mdsvex** - Markdown preprocessing
+- **mermaid** - Diagram rendering
+
+### Media
+- **howler** - Audio playback
+- **reading-time** - Reading time calculation
+
+## 🚀 Deployment
+
+### GitHub Pages
+
+1. Build the site:
 ```bash
-python scripts/generate_post.py content/my-post.md posts/custom-name.html
+npm run build
 ```
 
-### Create and generate a new post:
+2. Commit the `build/` folder:
 ```bash
-# Create the post
-nano content/2025-11-13-new-post.md
-
-# Generate it (index auto-updates!)
-python scripts/generate_post.py content/2025-11-13-new-post.md
-
-# Preview
-open posts/2025-11-13-new-post.html
-
-# Deploy
-git add .
-git commit -m "Add new post"
-git push origin main
+git add build/
+git commit -m "Build site"
+git push
 ```
 
-### Create a post with audio:
-```bash
-# Add audio file
-cp my-song.wav audio/
+3. Configure GitHub Pages to serve from `/build` directory
 
-# Convert to HQ MP3 (320k)
-python scripts/convert_audio.py --force
+### Alternative: GitHub Actions
 
-# Create post with audio player
-cat > content/my-music-post.md << 'EOF'
----
-title: My Music
-author: language seed
-date: 2025-11-13
----
+Create `.github/workflows/deploy.yml`:
 
-# Listen to My Track
+```yaml
+name: Deploy to GitHub Pages
 
-<audio src="../audio/my-song.mp3" data-title="My Song"></audio>
-EOF
+on:
+  push:
+    branches: [main]
 
-# Generate and deploy
-python scripts/generate_post.py content/my-music-post.md
-git add . && git commit -m "Add music post" && git push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
 ```
 
-### Test content in Merman:
-```bash
-# Open the scratchpad
-open merman.html
+## 📚 Migration from Python System
 
-# Or visit online
-open https://languageseed.github.io/hello_world/merman.html
+The old Python-based system has been archived in `OLD_SYSTEM/`. Key changes:
+
+### Old Workflow
+```bash
+python scripts/generate_post.py content/post.md
 ```
 
-## 🤝 Contributing
+### New Workflow
+```bash
+npm run build
+```
 
-This is a personal blog, but feel free to:
-- Fork the repository
-- Use it for your own blog
-- Suggest improvements
-- Share your customizations
+**Benefits:**
+- ✅ Automatic post discovery (no manual index updates)
+- ✅ Modern component system
+- ✅ Better code organization
+- ✅ TypeScript support
+- ✅ Hot reload in development
+
+## 🐛 Troubleshooting
+
+### Build Fails
+
+- Ensure Node.js 18+ is installed
+- Run `npm install` to ensure dependencies are up to date
+- Check for TypeScript errors: `npm run check`
+
+### Posts Not Showing
+
+- Ensure markdown files are in `content/` folder
+- Check frontmatter format (YAML with `---`)
+- Verify file names match slugs in URLs
+
+### Audio Not Playing
+
+- Ensure audio files are in `static/audio/`
+- Use correct path format: `/audio/filename.mp3`
+- Check browser console for errors
+
+### Mermaid Not Rendering
+
+- Ensure code blocks use `mermaid` language tag
+- Check browser console for Mermaid errors
+- Verify Mermaid syntax is correct
 
 ## 📄 License
 
-Free to use and modify for your own projects!
+This project uses the following open-source libraries:
+
+- **Mermaid.js** - Apache 2.0 License
+- **Marked.js** - MIT License
+- **Howler.js** - MIT License
+- **Lucide Icons** - ISC License
+- **shadcn-svelte** - MIT License
+
+All content is © 2025 Language Seed.
 
 ## 🙏 Credits
 
-- Based on the [Merman](file:///Users/ben/Documents/merman/merman.html) template
-- Powered by [Marked.js](https://marked.js.org/) for Markdown parsing (MIT License)
-- Diagrams by [Mermaid.js](https://mermaid.js.org/) (MIT License)
-- Audio playback by [Howler.js](https://howlerjs.com/) (MIT License)
-- Fonts: Inter & Montserrat from Google Fonts (Open Font License)
-
-**All libraries used are open-source with permissive licenses allowing free personal and commercial use.**
-
-## 📞 Support
-
-For questions or issues, please check the example post or open an issue on GitHub.
+- **SvelteKit** - Amazing framework
+- **shadcn/ui** - Beautiful component system
+- **Lucide** - Professional icon set
+- **Tailwind CSS** - Utility-first CSS framework
 
 ---
 
-**Happy Blogging! 🚀**
-
-*Built with ❤️ by Language Seed*
+**Built with ❤️ using SvelteKit, shadcn-svelte, and Lucide icons**
