@@ -28,8 +28,16 @@
   let volume: number[] = [100];
   let muted = false;
 
-  // Resolve audio path with base path
-  $: audioSrc = src.startsWith('/') ? `${base}${src}` : `${base}/${src}`;
+  // Resolve audio path with base path and properly encode URL segments
+  $: audioSrc = (() => {
+    // Build the full path
+    const fullPath = src.startsWith('/') ? `${base}${src}` : `${base}/${src}`;
+    // Split path and encode each segment (handles spaces in filenames)
+    const segments = fullPath.split('/').filter(s => s);
+    // Encode each segment to handle spaces and special characters
+    const encoded = segments.map(seg => encodeURIComponent(seg));
+    return '/' + encoded.join('/');
+  })();
 
   let loadError = false;
 
