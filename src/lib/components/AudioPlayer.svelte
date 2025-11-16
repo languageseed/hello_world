@@ -118,11 +118,22 @@
     }
   });
 
+  // Update audio src when audioSrc changes
+  $: if (audioElement && audioSrc) {
+    console.log('Setting audio src:', audioSrc);
+    audioElement.src = audioSrc;
+    loadError = false;
+  }
+
   onMount(() => {
     if (audioElement) {
+      // Set src explicitly
+      audioElement.src = audioSrc;
+      console.log('Audio element mounted with src:', audioSrc, 'base:', base);
+      
       audioElement.addEventListener('loadedmetadata', () => {
         duration = audioElement.duration || 0;
-        console.log('Audio metadata loaded:', { duration, audioSrc });
+        console.log('Audio metadata loaded:', { duration, audioSrc, actualSrc: audioElement.src });
       });
 
       audioElement.addEventListener('timeupdate', () => {
@@ -142,7 +153,7 @@
       });
 
       audioElement.addEventListener('error', (e) => {
-        console.error('Audio error:', e, audioSrc);
+        console.error('Audio error:', e, 'src:', audioElement.src, 'audioSrc:', audioSrc, 'base:', base);
         loadError = true;
       });
 
@@ -196,6 +207,10 @@
         src={audioSrc}
         preload="metadata"
         style="display: none;"
+        on:error={(e) => {
+          console.error('Audio element error:', e, 'src:', audioSrc, 'base:', base);
+          loadError = true;
+        }}
       ></audio>
       
       <div class="flex items-center gap-4">
