@@ -53,15 +53,20 @@
     console.log('AudioPlayer mounting:', { src, audioSrc, base });
     sound = new Howl({
       src: [audioSrc],
-      html5: false, // Use Web Audio API instead of HTML5 to avoid pool exhaustion
+      html5: true, // Use HTML5 for better compatibility and user interaction handling
       preload: 'metadata', // Only preload metadata, not full audio
       onload: () => {
         console.log('Audio loaded successfully:', audioSrc);
         duration = sound?.duration() || 0;
       },
-      onplay: () => {
+      onplay: (id) => {
+        console.log('Audio playing:', id);
         playing = true;
         updateProgress();
+      },
+      onplayerror: (id, error) => {
+        console.error('Play error:', error, { id, audioSrc });
+        loadError = true;
       },
       onpause: () => {
         playing = false;
@@ -99,12 +104,21 @@
   }
 
   function togglePlay() {
-    if (!sound) return;
+    if (!sound) {
+      console.error('Sound not initialized');
+      return;
+    }
     
     if (playing) {
       sound.pause();
     } else {
-      sound.play();
+      const soundId = sound.play();
+      if (soundId === undefined) {
+        console.error('Failed to play audio:', audioSrc);
+        loadError = true;
+      } else {
+        console.log('Playing audio with ID:', soundId);
+      }
     }
   }
 
