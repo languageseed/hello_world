@@ -53,7 +53,7 @@
     console.log('AudioPlayer mounting:', { src, audioSrc, base });
     sound = new Howl({
       src: [audioSrc],
-      html5: true, // Use HTML5 for better compatibility and user interaction handling
+      html5: false, // Use Web Audio API to avoid HTML5 pool exhaustion
       preload: true, // Preload the audio file
       onload: () => {
         console.log('Audio loaded successfully:', audioSrc);
