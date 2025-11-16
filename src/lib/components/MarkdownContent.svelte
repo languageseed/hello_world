@@ -93,17 +93,19 @@
   });
 </script>
 
-<div bind:this={container} class="markdown-content">
-  {#each segments as segment}
-    {#if segment.type === 'html' && segment.content}
-      {@html segment.content}
-    {:else if segment.type === 'audio' && segment.audioIndex !== undefined}
-      {@const audioTag = audioTags[segment.audioIndex]}
-      {#if audioTag}
-        <AudioPlayer src={audioTag.src} title={audioTag.title} />
+<div class="markdown-wrapper">
+  <div bind:this={container} class="markdown-content">
+    {#each segments as segment}
+      {#if segment.type === 'html' && segment.content}
+        {@html segment.content}
+      {:else if segment.type === 'audio' && segment.audioIndex !== undefined}
+        {@const audioTag = audioTags[segment.audioIndex]}
+        {#if audioTag}
+          <AudioPlayer src={audioTag.src} title={audioTag.title} />
+        {/if}
       {/if}
-    {/if}
-  {/each}
+    {/each}
+  </div>
 </div>
 
 <style>
@@ -153,6 +155,36 @@
   
   :global(.markdown-content li) {
     @apply mb-2;
+  }
+  
+  :global(.markdown-wrapper) {
+    @apply overflow-x-auto;
+  }
+  
+  :global(.markdown-content table) {
+    @apply w-full border-collapse mb-6 mt-4;
+    border: 1px solid hsl(var(--border));
+    min-width: 100%;
+  }
+  
+  :global(.markdown-content thead) {
+    @apply bg-gray-100;
+  }
+  
+  :global(.markdown-content th) {
+    @apply px-4 py-3 text-left font-semibold text-gray-900 border-b border-gray-300;
+  }
+  
+  :global(.markdown-content td) {
+    @apply px-4 py-3 border-b border-gray-200 text-gray-700;
+  }
+  
+  :global(.markdown-content tbody tr:hover) {
+    @apply bg-gray-50;
+  }
+  
+  :global(.markdown-content tbody tr:last-child td) {
+    @apply border-b-0;
   }
   
   :global(.mermaid-container) {
