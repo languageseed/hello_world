@@ -121,23 +121,53 @@
   }
 
   function togglePlay() {
-    console.log('togglePlay called', { sound: !!sound, playing, duration });
+    console.log('togglePlay called', { sound: !!sound, playing, duration, state: sound?.state() });
     if (!sound) {
       console.error('Sound not initialized');
       return;
     }
     
-    if (playing) {
+    // Check current playing state using Howler's method
+    const isCurrentlyPlaying = sound.playing();
+    console.log('Current playing state:', isCurrentlyPlaying);
+    
+    if (isCurrentlyPlaying) {
       console.log('Pausing audio');
       sound.pause();
+      playing = false;
     } else {
       console.log('Attempting to play audio:', audioSrc);
-      // Try to play - if it fails, onplayerror will handle unlock
+      console.log('Sound state:', sound.state());
+      
+      // Ensure audio is loaded
+      if (sound.state() === 'unloaded') {
+        console.log('Audio not loaded, loading now...');
+        sound.load();
+        sound.once('load', () => {
+          console.log('Audio loaded, playing now');
+          const soundId = sound.play();
+          console.log('Play after load, soundId:', soundId);
+        });
+        return;
+      }
+      
+      // Try to play
       const soundId = sound.play();
-      console.log('Play called, soundId:', soundId);
+      console.log('Play called, soundId:', soundId, 'state:', sound.state());
+      
       if (soundId === undefined) {
-        console.warn('Play returned undefined - may need user interaction unlock');
-        // The onplayerror handler will catch this and wait for unlock
+        console.warn('Play returned undefined');
+        // Check if we need to wait for unlock
+        if (sound.state() === 'loading') {
+          console.log('Audio still loading, waiting...');
+          sound.once('load', () => {
+            const retryId = sound.play();
+            console.log('Retry play after load, soundId:', retryId);
+          });
+        }
+      } else {
+        // Play was successful, but onplay callback will set playing state
+        console.log('Play initiated successfully with ID:', soundId);
       }
     }
   }
