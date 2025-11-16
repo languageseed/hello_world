@@ -31,6 +31,8 @@
   // Resolve audio path with base path
   $: audioSrc = src.startsWith('/') ? `${base}${src}` : `${base}/${src}`;
 
+  let loadError = false;
+
   onMount(() => {
     sound = new Howl({
       src: [audioSrc],
@@ -49,6 +51,14 @@
         playing = false;
         progress = [0];
         currentTime = 0;
+      },
+      onloaderror: (id, error) => {
+        console.warn(`Failed to load audio: ${audioSrc}`, error);
+        loadError = true;
+      },
+      onerror: (id, error) => {
+        console.warn(`Audio error: ${audioSrc}`, error);
+        loadError = true;
       }
     });
   });
@@ -110,38 +120,42 @@
     {/if}
   </CardHeader>
   <CardContent>
-    <div class="flex items-center gap-4">
-      <Button variant="default" size="icon" on:click={togglePlay}>
-        {#if playing}
-          <Pause class="w-5 h-5" />
-        {:else}
-          <Play class="w-5 h-5" />
-        {/if}
-      </Button>
-      
-      <div class="flex-1">
-        <Slider
-          value={progress}
-          min={0}
-          max={100}
-          step={0.1}
-          onValueChange={handleSeek}
-          class="mb-2"
-        />
-        <div class="flex justify-between text-xs text-gray-600">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+    {#if loadError}
+      <p class="text-sm text-gray-600 italic">This audio file is not available.</p>
+    {:else}
+      <div class="flex items-center gap-4">
+        <Button variant="default" size="icon" on:click={togglePlay}>
+          {#if playing}
+            <Pause class="w-5 h-5" />
+          {:else}
+            <Play class="w-5 h-5" />
+          {/if}
+        </Button>
+        
+        <div class="flex-1">
+          <Slider
+            value={progress}
+            min={0}
+            max={100}
+            step={0.1}
+            onValueChange={handleSeek}
+            class="mb-2"
+          />
+          <div class="flex justify-between text-xs text-gray-600">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(duration)}</span>
+          </div>
         </div>
+        
+        <Button variant="ghost" size="icon" on:click={toggleMute}>
+          {#if muted}
+            <VolumeX class="w-5 h-5" />
+          {:else}
+            <Volume2 class="w-5 h-5" />
+          {/if}
+        </Button>
       </div>
-      
-      <Button variant="ghost" size="icon" on:click={toggleMute}>
-        {#if muted}
-          <VolumeX class="w-5 h-5" />
-        {:else}
-          <Volume2 class="w-5 h-5" />
-        {/if}
-      </Button>
-    </div>
+    {/if}
   </CardContent>
 </Card>
 
