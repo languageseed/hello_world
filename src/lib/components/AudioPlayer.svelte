@@ -35,8 +35,8 @@
 
   // Resolve audio path with base path and properly encode URL segments
   $: audioSrc = (() => {
-    // Ensure base path is included
-    const basePath = base || '/hello_world';
+    // Always use /hello_world as base path for GitHub Pages
+    const basePath = '/hello_world';
     const fullPath = src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
     const segments = fullPath.split('/').filter(s => s);
     const encoded = segments.map((seg) => {
@@ -46,7 +46,6 @@
       return seg;
     });
     const result = '/' + encoded.join('/');
-    console.log('Calculated audioSrc:', { src, base, basePath, fullPath, result });
     return result;
   })();
 
