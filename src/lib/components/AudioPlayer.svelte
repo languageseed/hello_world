@@ -54,10 +54,13 @@
     sound = new Howl({
       src: [audioSrc],
       html5: true, // Use HTML5 for better compatibility and user interaction handling
-      preload: 'metadata', // Only preload metadata, not full audio
+      preload: true, // Preload the audio file
       onload: () => {
         console.log('Audio loaded successfully:', audioSrc);
-        duration = sound?.duration() || 0;
+        if (sound) {
+          duration = sound.duration() || 0;
+          console.log('Duration set to:', duration);
+        }
       },
       onplay: (id) => {
         console.log('Audio playing:', id);
@@ -69,9 +72,11 @@
         loadError = true;
       },
       onpause: () => {
+        console.log('Audio paused');
         playing = false;
       },
       onend: () => {
+        console.log('Audio ended');
         playing = false;
         progress = [0];
         currentTime = 0;
@@ -85,6 +90,9 @@
         loadError = true;
       }
     });
+    
+    // Explicitly load the audio
+    sound.load();
   });
 
   onDestroy(() => {
@@ -104,20 +112,34 @@
   }
 
   function togglePlay() {
+    console.log('togglePlay called', { sound: !!sound, playing, duration });
     if (!sound) {
       console.error('Sound not initialized');
       return;
     }
     
     if (playing) {
+      console.log('Pausing audio');
       sound.pause();
     } else {
-      const soundId = sound.play();
-      if (soundId === undefined) {
-        console.error('Failed to play audio:', audioSrc);
-        loadError = true;
+      console.log('Attempting to play audio:', audioSrc);
+      // Ensure audio is loaded before playing
+      if (duration === 0) {
+        console.log('Duration is 0, waiting for load...');
+        sound.once('load', () => {
+          console.log('Audio loaded, now playing');
+          duration = sound.duration();
+          const soundId = sound.play();
+          console.log('Play called, soundId:', soundId);
+        });
+        sound.load();
       } else {
-        console.log('Playing audio with ID:', soundId);
+        const soundId = sound.play();
+        console.log('Play called, soundId:', soundId, 'playing state:', sound.playing());
+        if (soundId === undefined) {
+          console.error('Failed to play audio:', audioSrc);
+          loadError = true;
+        }
       }
     }
   }
