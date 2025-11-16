@@ -32,20 +32,30 @@
   $: audioSrc = (() => {
     // Build the full path
     const fullPath = src.startsWith('/') ? `${base}${src}` : `${base}/${src}`;
-    // Split path and encode each segment (handles spaces in filenames)
+    // Split path and encode only filename segments (not base path)
     const segments = fullPath.split('/').filter(s => s);
-    // Encode each segment to handle spaces and special characters
-    const encoded = segments.map(seg => encodeURIComponent(seg));
+    // Encode segments but preserve base path structure
+    // Only encode segments that contain spaces or special chars (typically filenames)
+    const encoded = segments.map((seg, index) => {
+      // Don't encode base path segments (first 1-2 segments)
+      // Only encode if segment contains spaces or special characters
+      if (seg.includes(' ') || seg.includes('%') || seg.match(/[^a-zA-Z0-9._-]/)) {
+        return encodeURIComponent(seg);
+      }
+      return seg;
+    });
     return '/' + encoded.join('/');
   })();
 
   let loadError = false;
 
   onMount(() => {
+    console.log('AudioPlayer mounting:', { src, audioSrc, base });
     sound = new Howl({
       src: [audioSrc],
       html5: true,
       onload: () => {
+        console.log('Audio loaded successfully:', audioSrc);
         duration = sound?.duration() || 0;
       },
       onplay: () => {
@@ -61,11 +71,11 @@
         currentTime = 0;
       },
       onloaderror: (id, error) => {
-        console.warn(`Failed to load audio: ${audioSrc}`, error);
+        console.error(`Failed to load audio: ${audioSrc}`, error, { id, src, base });
         loadError = true;
       },
       onerror: (id, error) => {
-        console.warn(`Audio error: ${audioSrc}`, error);
+        console.error(`Audio error: ${audioSrc}`, error, { id, src, base });
         loadError = true;
       }
     });
