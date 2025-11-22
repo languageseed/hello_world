@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Github, Sprout } from 'lucide-svelte';
+  import { Github, Sprout, Pencil } from 'lucide-svelte';
+  import { base } from '$app/paths';
   import Button from './ui/button.svelte';
 </script>
 
@@ -11,7 +12,7 @@
   <p class="text-sm opacity-90 font-normal max-w-2xl mx-auto">
     Notes to self, articles and content to share with others
   </p>
-  <div class="mt-2">
+  <div class="mt-2 flex items-center justify-center gap-3">
     <a
       href="https://github.com/languageseed/hello_world"
       target="_blank"
@@ -20,6 +21,13 @@
     >
       <Github class="w-5 h-5" />
       View on GitHub
+    </a>
+    <a
+      href="{base}/merman"
+      class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-white/10 rounded-md transition-all hover:bg-white/20"
+    >
+      <Pencil class="w-5 h-5" />
+      Merman Scratchpad
     </a>
   </div>
 </header>

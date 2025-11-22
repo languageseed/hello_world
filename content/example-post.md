@@ -25,7 +25,8 @@ This blog template supports a wide variety of content types:
 
 You can easily add images to your blog posts. Just place your images in the `images/` folder and reference them in your markdown:
 
-![Example Image](../images/example.jpg)
+<!-- Example: ![Example Image](../images/example.jpg) -->
+*(Add your images to the `static/images/` folder to display them here)*
 
 ### Image Syntax
 

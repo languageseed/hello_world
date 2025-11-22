@@ -9,7 +9,13 @@ export const load: PageServerLoad = async ({ params }) => {
     throw error(404, 'Post not found');
   }
   
-  return { post };
+  // Get all posts for the sidebar
+  const allPosts = getPosts();
+  
+  // Filter out the current post and get up to 5 other posts
+  const otherPosts = allPosts.filter(p => p.slug !== params.slug).slice(0, 5);
+  
+  return { post, otherPosts };
 };
 
 export async function entries() {

@@ -5,11 +5,14 @@
   import mermaid from 'mermaid';
   import Button from '$lib/components/ui/button.svelte';
   import Card from '$lib/components/ui/card.svelte';
-  import { Download, Copy, Trash2, Home, Fish } from 'lucide-svelte';
+  import { Download, Copy, Trash2, Home, Fish, GripVertical } from 'lucide-svelte';
 
   let markdown = '';
   let previewHtml = '';
   let previewContainer: HTMLDivElement;
+  let leftPaneWidth = 50; // Percentage
+  let isDragging = false;
+  let splitPaneContainer: HTMLDivElement;
 
   // Load from localStorage on mount
   onMount(() => {
@@ -19,6 +22,12 @@
       updatePreview();
     }
 
+    // Load saved pane width
+    const savedWidth = localStorage.getItem('merman-pane-width');
+    if (savedWidth) {
+      leftPaneWidth = parseFloat(savedWidth);
+    }
+
     // Initialize Mermaid
     mermaid.initialize({
       startOnLoad: false,
@@ -26,6 +35,33 @@
       securityLevel: 'loose'
     });
   });
+
+  function startDragging(e: MouseEvent) {
+    isDragging = true;
+    document.body.classList.add('dragging');
+    e.preventDefault();
+  }
+
+  function stopDragging() {
+    if (isDragging) {
+      isDragging = false;
+      document.body.classList.remove('dragging');
+      // Save pane width to localStorage
+      localStorage.setItem('merman-pane-width', leftPaneWidth.toString());
+    }
+  }
+
+  function handleDrag(e: MouseEvent) {
+    if (!isDragging || !splitPaneContainer) return;
+    
+    const containerRect = splitPaneContainer.getBoundingClientRect();
+    const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+    
+    // Constrain between 20% and 80%
+    if (newWidth >= 20 && newWidth <= 80) {
+      leftPaneWidth = newWidth;
+    }
+  }
 
   function updatePreview() {
     // Save to localStorage
@@ -122,10 +158,16 @@
     </div>
   </header>
 
-  <!-- Split Pane -->
-  <div class="flex-1 flex overflow-hidden">
+  <!-- Split Pane with Resizer -->
+  <div 
+    bind:this={splitPaneContainer}
+    class="flex-1 flex overflow-hidden relative"
+    on:mousemove={handleDrag}
+    on:mouseup={stopDragging}
+    on:mouseleave={stopDragging}
+  >
     <!-- Editor -->
-    <div class="w-1/2 border-r border-gray-200 flex flex-col">
+    <div class="border-r border-gray-200 flex flex-col" style="width: {leftPaneWidth}%">
       <div class="bg-gray-100 px-4 py-2 border-b border-gray-200">
         <h2 class="font-semibold text-gray-700">Markdown Editor</h2>
       </div>
@@ -148,8 +190,21 @@ graph TD
       />
     </div>
 
+    <!-- Resizer Handle -->
+    <div 
+      class="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex items-center justify-center group transition-colors relative"
+      on:mousedown={startDragging}
+      role="separator"
+      aria-label="Resize panes"
+      tabindex="0"
+    >
+      <div class="absolute inset-y-0 flex items-center justify-center pointer-events-none">
+        <GripVertical class="w-4 h-4 text-gray-500 group-hover:text-white" />
+      </div>
+    </div>
+
     <!-- Preview -->
-    <div class="w-1/2 overflow-auto bg-white flex flex-col">
+    <div class="overflow-auto bg-white flex flex-col" style="width: {100 - leftPaneWidth}%">
       <div class="bg-gray-100 px-4 py-2 border-b border-gray-200">
         <h2 class="font-semibold text-gray-700">Preview</h2>
       </div>
@@ -218,6 +273,27 @@ graph TD
   
   :global(.mermaid-container) {
     @apply flex justify-center overflow-x-auto my-6;
+  }
+
+  /* Resizer Handle Styles */
+  [role="separator"] {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  [role="separator"]:active {
+    @apply bg-blue-600;
+  }
+
+  /* Prevent text selection while dragging */
+  :global(body.dragging) {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: col-resize !important;
   }
 </style>
 

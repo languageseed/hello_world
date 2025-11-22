@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { base } from '$app/paths';
-  import PostCard from '$lib/components/PostCard.svelte';
+  import MarkdownContent from '$lib/components/MarkdownContent.svelte';
   import Card from '$lib/components/ui/card.svelte';
   import CardHeader from '$lib/components/ui/card-header.svelte';
   import CardTitle from '$lib/components/ui/card-title.svelte';
@@ -15,48 +15,98 @@
     Code,
     Palette,
     Smartphone,
-    Pencil,
     Rocket,
-    Sparkles
+    Sparkles,
+    Calendar,
+    User,
+    ArrowRight
   } from 'lucide-svelte';
 
   export let data: PageData;
+  
+  // Split posts into featured and others
+  $: featuredPost = data.posts[0];
+  $: otherPosts = data.posts.slice(1);
 </script>
 
 <div class="max-w-7xl mx-auto px-6 py-12">
-  <!-- Intro Section -->
-  <Card class="bg-gradient-to-br from-gray-900 to-gray-700 text-white mb-12 p-8 shadow-lg">
+  <!-- Intro Section - Updated to white with border -->
+  <Card class="bg-white border border-gray-200 text-gray-900 mb-12 p-8 shadow-sm">
     <h2 class="font-display text-3xl mb-4">Welcome to the Language Seed Blog!</h2>
-    <p class="text-lg leading-relaxed opacity-95">
+    <p class="text-lg leading-relaxed text-gray-700">
       This is a simple, beautiful, and powerful blog system built with Markdown and Mermaid support.
       Create stunning blog posts with rich formatting, diagrams, code snippets, and more - all from
       simple markdown files.
     </p>
   </Card>
 
-  <!-- Merman Button -->
-  <div class="text-center mb-8">
-    <a href="{base}/merman">
-      <Button
-        variant="default"
-        size="lg"
-        class="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-8 py-6 text-lg font-bold shadow-lg hover:scale-105 transition-transform"
-      >
-        <Pencil class="w-5 h-5 mr-2" />
-        Open Merman Scratchpad
-      </Button>
-    </a>
-    <p class="mt-3 text-gray-600 text-sm">
-      Quick Markdown & Mermaid preview tool - paste, edit, and see results instantly!
-    </p>
-  </div>
+  <!-- Featured Post Content and Latest Posts Section -->
+  <div class="mb-16">
+    <h2 class="font-display text-4xl mb-8">Latest Posts</h2>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Featured Post Content (Left - 2 columns) -->
+      {#if featuredPost && data.featuredPostContent}
+        <div class="lg:col-span-2">
+          <Card class="h-full overflow-hidden">
+            <CardHeader class="border-b border-gray-200 pb-4">
+              <CardTitle class="text-3xl font-display font-bold mb-3">
+                {featuredPost.title}
+              </CardTitle>
+              <div class="flex items-center gap-4 text-gray-600 text-sm">
+                <span class="flex items-center gap-1">
+                  <User class="w-4 h-4" />
+                  {featuredPost.author}
+                </span>
+                <span class="flex items-center gap-1">
+                  <Calendar class="w-4 h-4" />
+                  {featuredPost.date}
+                </span>
+              </div>
+            </CardHeader>
+            
+            <CardContent class="p-8">
+              <MarkdownContent content={data.featuredPostContent} />
+            </CardContent>
+          </Card>
+        </div>
 
-  <!-- Latest Posts -->
-  <h2 class="font-display text-4xl mb-6">Latest Posts</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-    {#each data.posts as post}
-      <PostCard post={post} />
-    {/each}
+        <!-- Other Posts (Right - 1 column) -->
+        <div class="lg:col-span-1 space-y-6">
+          {#each otherPosts as post}
+            <a href="{base}/posts/{post.slug}" class="block group">
+              <Card class="h-full hover:shadow-lg transition-all duration-200">
+                <CardContent class="p-6">
+                  <h3 class="font-display text-xl font-semibold mb-3 group-hover:text-gray-900 transition-colors">
+                    {post.title}
+                  </h3>
+                  
+                  <div class="flex items-center gap-4 text-gray-600 text-sm mb-3">
+                    <span class="flex items-center gap-1">
+                      <User class="w-3 h-3" />
+                      {post.author}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <Calendar class="w-3 h-3" />
+                      {post.date}
+                    </span>
+                  </div>
+                  
+                  <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+                    {post.excerpt}
+                  </p>
+                  
+                  <span class="text-gray-900 text-sm font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                    Read more
+                    <ArrowRight class="w-4 h-4" />
+                  </span>
+                </CardContent>
+              </Card>
+            </a>
+          {/each}
+        </div>
+      {/if}
+    </div>
   </div>
 
   <!-- Quick Start Guide -->
@@ -80,7 +130,7 @@
     <Sparkles class="w-8 h-8" />
     Features
   </h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
     <Card class="hover:shadow-md transition-all hover:-translate-y-1">
       <CardHeader>
         <FileText class="w-8 h-8 text-gray-900 mb-2" />
@@ -161,6 +211,18 @@
       <CardContent>
         <p class="text-sm text-gray-600 leading-relaxed">
           Looks great on all devices - desktop, tablet, and mobile.
+        </p>
+      </CardContent>
+    </Card>
+    
+    <Card class="hover:shadow-md transition-all hover:-translate-y-1">
+      <CardHeader>
+        <Rocket class="w-8 h-8 text-gray-900 mb-2" />
+        <CardTitle>Static & Fast</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          Pre-rendered static site for blazing fast load times and optimal SEO.
         </p>
       </CardContent>
     </Card>
