@@ -48,7 +48,22 @@ export function getPosts(): Post[] {
       };
     })
     .sort((a, b) => {
-      // Sort by file name which includes date
+      // Sort by actual date from frontmatter (newest first)
+      // Extract date from slug if it starts with YYYY-MM-DD format
+      const dateRegex = /^(\d{4}-\d{2}-\d{2})/;
+      const aDateMatch = a.slug.match(dateRegex);
+      const bDateMatch = b.slug.match(dateRegex);
+      
+      // If both have dates in slug, use those for comparison
+      if (aDateMatch && bDateMatch) {
+        return bDateMatch[1].localeCompare(aDateMatch[1]);
+      }
+      
+      // If only one has a date, prioritize the one with a date
+      if (aDateMatch) return -1;
+      if (bDateMatch) return 1;
+      
+      // If neither has a date in slug, fall back to alphabetical by slug
       return b.slug.localeCompare(a.slug);
     });
   
