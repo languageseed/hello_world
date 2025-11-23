@@ -7,7 +7,7 @@ tags: ["devops", "ubuntu", "docker", "ai", "announcement", "wsl", "winboat"]
 
 # Introducing Bentobox: Linux Subsystem for Windows (LSW)
 
-> **Built on the shoulders of giants**: This project is inspired by and built upon [Omakub](https://omakub.org/) by DHH and the ambitious [Omarchy](https://omarchy.org/) project. We're grateful to the 37signals team for their vision of beautiful, opinionated Linux environments.
+> **Built on the shoulders of giants**: This project is inspired by and built upon [Omakub](https://omakub.org) by DHH and the ambitious [Omarchy](https://omarchy.org) project. We're grateful to the 37signals team for their vision of beautiful, opinionated Linux environments.
 
 I'm excited to announce the release of [**Bentobox**](https://github.com/languageseed/bentobox), a carefully curated Ubuntu development environment that **flips the Windows Subsystem for Linux (WSL) paradigm on its head**.
 
