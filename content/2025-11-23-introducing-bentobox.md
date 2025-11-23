@@ -1,0 +1,137 @@
+---
+title: "Introducing Bentobox: Linux Subsystem for Windows (LSW)"
+date: "2025-11-23"
+excerpt: "Flipping the script on WSL - Bentobox puts Linux first with Windows as a guest via WinBoat. A thoughtfully curated Ubuntu setup for developers seeking a Windows exit strategy without ditching Windows completely."
+tags: ["devops", "ubuntu", "docker", "ai", "announcement", "wsl", "winboat"]
+---
+
+# Introducing Bentobox: Linux Subsystem for Windows (LSW)
+
+I'm excited to announce the release of [**Bentobox**](https://github.com/languageseed/bentobox), a carefully curated Ubuntu development environment that **flips the Windows Subsystem for Linux (WSL) paradigm on its head**.
+
+## The Big Idea: Linux Subsystem for Windows (LSW)
+
+For years, Windows developers have used WSL to run Linux inside Windows. Bentobox does the reverse - it makes **Linux your primary OS** and runs Windows as a seamless guest using **WinBoat**.
+
+This isn't revolutionary technology - it's a Windows VM. But WinBoat makes the experience so polished that Windows apps integrate naturally with your Linux desktop. For Windows users looking for an **exit strategy without completely ditching Windows**, this is the best compromise I've found.
+
+Let's make "Linux Subsystem for Windows" (LSW) a thing. 😄
+
+## What is Bentobox?
+
+Bentobox is a fork of the excellent [Omakub](https://github.com/basecamp/omakub) project by DHH, customized and enhanced for professional development workflows with a focus on **containers, AI integration, remote work, and Windows app compatibility**.
+
+The name reflects our philosophy: like a Japanese bento box, we've carefully selected quality tools over quantity, each serving a specific purpose, arranged thoughtfully in a beautiful container.
+
+## 🎯 Key Features
+
+### Core Tools (Always Installed)
+
+- **Modern Editors**: Neovim, VS Code, Zed
+- **Docker & Portainer**: Full container management UI at `localhost:9000`
+- **OpenWebUI**: AI chat interface at `localhost:3000`
+- **Essential Apps**: Chrome, Obsidian, VLC, Flameshot, and more
+- **7 Custom Wallpapers**: Professionally curated from Pexels
+
+### Optional Components (Your Choice)
+
+During installation, you can select:
+
+- **Programming Languages**: Ruby on Rails, Node.js, Python, Go, PHP, Elixir, Rust, Java
+- **Professional Tools**: 1Password, Tailscale VPN, Sublime Text
+- **WinBoat**: Run Windows apps seamlessly on Linux (like "reverse WSL")
+- **Ollama**: Local LLM server for privacy-focused AI development
+- **Barrier**: Free KVM sharing for multi-computer setups
+
+## 🚀 Quick Start
+
+Installation is simple - just run this one command on a fresh Ubuntu 24.04+ system:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/languageseed/bentobox/master/boot.sh | bash
+```
+
+The installer will guide you through:
+1. Selecting optional applications
+2. Choosing programming languages
+3. Configuring Docker containers
+4. Setting up your development environment
+
+Installation takes 15-30 minutes depending on your selections.
+
+## 💡 What Makes Bentobox Special?
+
+### It Flips the Script: LSW > WSL
+
+Microsoft gave us Windows Subsystem for Linux. Bentobox gives you **Linux Subsystem for Windows**. 
+
+Linux becomes your primary OS - your terminal, your development environment, your daily driver. Windows stays available when you need it, but it's no longer in control. For anyone tired of Windows Update interruptions, telemetry concerns, or just wanting more control over their machine, this is the migration path that lets you keep one foot in both worlds.
+
+### Container-First Development
+
+Bentobox comes with **Portainer** pre-configured, giving you a powerful Docker management UI right out of the box. No more memorizing docker commands - manage containers, images, volumes, and networks through an intuitive web interface.
+
+### AI-Ready
+
+With **OpenWebUI** included by default, you're ready to integrate AI into your workflow immediately. Add the optional **Ollama** container to run models like Llama 3.2 locally, keeping your code and prompts private.
+
+### Remote Work Friendly
+
+Optional **Tailscale** integration makes remote development seamless. Access your development environment securely from anywhere - your Portainer dashboard, web apps, even your clipboard sync with Barrier.
+
+### The LSW Experience: Windows Apps on Linux
+
+Here's where Bentobox really shines. The optional **WinBoat** feature creates what I call **Linux Subsystem for Windows (LSW)** - the reverse of Microsoft's WSL.
+
+WinBoat runs a Windows 10 VM under the hood, but the experience is seamless:
+- Windows apps appear as native Linux windows
+- Shared clipboard between Linux and Windows
+- Filesystem integration - access your Linux files from Windows
+- USB device passthrough
+- Native Linux window management
+
+It's nothing revolutionary - just a VM with good integration. But WinBoat makes it *feel* right. You're not switching between two worlds; Windows just becomes another application layer on your Linux desktop.
+
+**For Windows users seeking an exit plan**, this is the compromise that works. You keep Windows for those stubborn apps (Adobe Creative Suite, specialized tools, legacy software) while making Linux your daily driver. No cold turkey required.
+
+## 📚 Documentation & Support
+
+The repository includes comprehensive documentation:
+- Complete installation guide
+- Post-installation setup for AI models
+- Troubleshooting for common issues
+- WinBoat testing guides
+- Wallpaper licensing and credits
+
+## 🙏 Credits & License
+
+Bentobox is released under the **MIT License** and is built on the excellent foundation of Omakub by DHH and contributors. Huge thanks to the original project for creating such a solid base to build upon.
+
+Special thanks to the Pexels photography community for the beautiful wallpapers included in the project.
+
+## 🔗 Get Started
+
+Ready to try Bentobox?
+
+- **Repository**: [github.com/languageseed/bentobox](https://github.com/languageseed/bentobox)
+- **Original Omakub**: [github.com/basecamp/omakub](https://github.com/basecamp/omakub)
+- **Report Issues**: [github.com/languageseed/bentobox/issues](https://github.com/languageseed/bentobox/issues)
+
+## 🌟 Why Bentobox?
+
+The name "Bentobox" reflects our philosophy: a carefully curated selection of tools, each serving a specific purpose, arranged thoughtfully in a beautiful container. Like a Japanese bento box, we've chosen quality over quantity, creating a balanced and professional development environment.
+
+But more importantly, Bentobox represents a shift in thinking. **You don't need Windows as your primary OS anymore**. With LSW (Linux Subsystem for Windows), you get:
+- The power and flexibility of Linux as your foundation
+- Access to Windows when you absolutely need it
+- A beautiful, curated development environment
+- Freedom from Windows' quirks while maintaining compatibility
+
+Whether you're setting up a new development machine, containerizing your workflow, exploring AI-assisted development, or finally making the jump from Windows to Linux (without burning bridges), Bentobox provides a thoughtfully curated starting point.
+
+Give it a try and let me know what you think! And if "Linux Subsystem for Windows" catches on... well, you heard it here first. 😉
+
+---
+
+*Have questions or suggestions? Feel free to open an issue on the GitHub repository or reach out directly.*
+
