@@ -7,17 +7,63 @@ export interface AudioTag {
   position: number; // Position in the content
 }
 
+export interface CarouselData {
+  images: Array<{ src: string; alt: string; caption?: string }>;
+  position: number;
+}
+
 export function processMarkdown(content: string): {
   html: string;
   audioTags: AudioTag[];
+  carousels: CarouselData[];
 } {
   const audioTags: AudioTag[] = [];
+  const carousels: CarouselData[] = [];
+  
+  // Extract carousel tags first
+  // Format: <carousel>image1.png|Alt text|Caption;image2.png|Alt text 2|Caption 2</carousel>
+  const carouselRegex = /<carousel>([\s\S]*?)<\/carousel>/g;
+  let carouselMatch;
+  let processedContent = content;
+  let carouselIndex = 0;
+  
+  const carouselMatches: Array<{ match: RegExpMatchArray; index: number }> = [];
+  
+  while ((carouselMatch = carouselRegex.exec(content)) !== null) {
+    carouselMatches.push({ match: carouselMatch, index: carouselMatch.index });
+  }
+  
+  // Process carousels in reverse order
+  carouselMatches.reverse().forEach(({ match, index }) => {
+    const carouselContent = match[1].trim();
+    const imageEntries = carouselContent.split(';').map(entry => entry.trim()).filter(Boolean);
+    
+    const images = imageEntries.map(entry => {
+      const parts = entry.split('|').map(p => p.trim());
+      return {
+        src: parts[0].replace('../images/', '/images/'),
+        alt: parts[1] || '',
+        caption: parts[2]
+      };
+    });
+    
+    carousels.unshift({
+      images,
+      position: index
+    });
+    
+    // Replace with placeholder
+    processedContent = processedContent.substring(0, index) + 
+      `\n\n<!--CAROUSEL_${carouselMatches.length - 1 - carouselIndex}-->\n\n` + 
+      processedContent.substring(index + match[0].length);
+    
+    carouselIndex++;
+  });
   
   // Extract audio tags before processing markdown
   // But exclude audio tags inside code blocks (```code blocks or indented code)
   const audioRegex = /<audio src="([^"]+)"[^>]*data-title="([^"]*)"[^>]*><\/audio>/g;
   let match;
-  let processedContent = content;
   let audioIndex = 0;
   
   // Find all audio tags and their positions, but exclude those in code blocks
@@ -40,9 +86,9 @@ export function processMarkdown(content: string): {
     return false;
   };
   
-  while ((match = audioRegex.exec(content)) !== null) {
+  while ((match = audioRegex.exec(processedContent)) !== null) {
     // Only add if not inside a code block
-    if (!isInCodeBlock(match.index, content)) {
+    if (!isInCodeBlock(match.index, processedContent)) {
       matches.push({ match, index: match.index });
     }
   }
@@ -85,6 +131,13 @@ export function processMarkdown(content: string): {
     );
   });
   
-  return { html, audioTags };
+  carousels.forEach((carousel, index) => {
+    html = html.replace(
+      new RegExp(`<!--CAROUSEL_${index}-->`, 'g'),
+      `<div data-carousel-marker="${index}" style="display:none;"></div>`
+    );
+  });
+  
+  return { html, audioTags, carousels };
 }
 

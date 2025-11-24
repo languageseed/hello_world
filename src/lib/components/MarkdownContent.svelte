@@ -1,24 +1,36 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import AudioPlayer from './AudioPlayer.svelte';
+  import ImageCarousel from './ImageCarousel.svelte';
   import mermaid from 'mermaid';
   import { processMarkdown } from '$lib/utils/markdown';
 
   export let content: string;
   
-  const { html, audioTags } = processMarkdown(content);
+  const { html, audioTags, carousels } = processMarkdown(content);
   let container: HTMLDivElement;
   
-  // Split HTML by audio markers and create segments
-  const segments: Array<{ type: 'html' | 'audio'; content?: string; audioIndex?: number }> = [];
+  // Split HTML by audio and carousel markers and create segments
+  const segments: Array<{ type: 'html' | 'audio' | 'carousel'; content?: string; audioIndex?: number; carouselIndex?: number }> = [];
   
-  // Find all audio markers and their positions
+  // Find all markers and their positions
   const audioMarkerRegex = /<div data-audio-marker="(\d+)"[^>]*><\/div>/g;
-  const markers: Array<{ index: number; position: number; match: string }> = [];
+  const carouselMarkerRegex = /<div data-carousel-marker="(\d+)"[^>]*><\/div>/g;
+  const markers: Array<{ type: 'audio' | 'carousel'; index: number; position: number; match: string }> = [];
   let match;
   
   while ((match = audioMarkerRegex.exec(html)) !== null) {
     markers.push({
+      type: 'audio',
+      index: parseInt(match[1]),
+      position: match.index,
+      match: match[0]
+    });
+  }
+  
+  while ((match = carouselMarkerRegex.exec(html)) !== null) {
+    markers.push({
+      type: 'carousel',
       index: parseInt(match[1]),
       position: match.index,
       match: match[0]
@@ -30,7 +42,7 @@
   
   // Split HTML into segments
   let lastIndex = 0;
-  markers.forEach(({ index, position, match }) => {
+  markers.forEach(({ type, index, position, match }) => {
     // Add HTML segment before marker
     if (position > lastIndex) {
       segments.push({
@@ -38,11 +50,18 @@
         content: html.substring(lastIndex, position)
       });
     }
-    // Add audio segment
-    segments.push({
-      type: 'audio',
-      audioIndex: index
-    });
+    // Add audio or carousel segment
+    if (type === 'audio') {
+      segments.push({
+        type: 'audio',
+        audioIndex: index
+      });
+    } else if (type === 'carousel') {
+      segments.push({
+        type: 'carousel',
+        carouselIndex: index
+      });
+    }
     lastIndex = position + match.length;
   });
   
@@ -102,6 +121,11 @@
         {@const audioTag = audioTags[segment.audioIndex]}
         {#if audioTag}
           <AudioPlayer src={audioTag.src} title={audioTag.title} />
+        {/if}
+      {:else if segment.type === 'carousel' && segment.carouselIndex !== undefined}
+        {@const carousel = carousels[segment.carouselIndex]}
+        {#if carousel}
+          <ImageCarousel images={carousel.images} />
         {/if}
       {/if}
     {/each}
