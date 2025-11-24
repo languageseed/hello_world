@@ -1,5 +1,6 @@
 ---
 title: "Introducing Bentobox: Linux Subsystem for Windows (LSW)"
+author: Language Seed
 date: "2025-11-23"
 excerpt: "Flipping the script on WSL - Bentobox puts Linux first with Windows as a guest via WinBoat. A thoughtfully curated Ubuntu setup for developers seeking a Windows exit strategy without ditching Windows completely."
 tags: ["devops", "ubuntu", "docker", "ai", "announcement", "wsl", "winboat"]

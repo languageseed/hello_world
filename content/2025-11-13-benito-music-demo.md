@@ -1,6 +1,6 @@
 ---
 title: Benito's Original Music - Audio Demo
-author: language seed
+author: Language Seed
 date: 2025-11-13
 ---
 

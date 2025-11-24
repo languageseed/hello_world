@@ -1,6 +1,6 @@
 ---
 title: Mermaid Test Post
-author: Test
+author: Language Seed
 date: 2025-11-12
 ---
 

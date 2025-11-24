@@ -1,6 +1,6 @@
 ---
 title: Getting Started with Language Seed Blog
-author: language seed
+author: Language Seed
 date: 2025-11-12
 ---
 

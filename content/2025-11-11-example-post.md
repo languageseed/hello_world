@@ -1,6 +1,6 @@
 ---
 title: Welcome to Hello World - A Complete Guide
-author: Language Seed Team
+author: Language Seed
 date: 2025-11-12
 ---
 

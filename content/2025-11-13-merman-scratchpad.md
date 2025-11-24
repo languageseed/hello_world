@@ -1,6 +1,6 @@
 ---
 title: Introducing Merman - Your Markdown & Mermaid Scratchpad
-author: language seed
+author: Language Seed
 date: 2025-11-13
 ---
 
