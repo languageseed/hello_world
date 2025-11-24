@@ -112,12 +112,10 @@ For Linux gaming compatibility, check [ProtonDB](https://www.protondb.com/) for 
 
 ## 🚀 Installation
 
-## 🚀 Installation
-
 It's genuinely this simple—one command on a fresh Ubuntu 24.04+ system:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/languageseed/bentobox/master/boot.sh | bash
+wget -qO- https://omakub.org/install | bash
 ```
 
 **What happens next:**
