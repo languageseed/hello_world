@@ -35,6 +35,7 @@ The name reflects our philosophy: like a Japanese bento box, we've carefully sel
 - **OpenWebUI**: AI chat interface at `localhost:3000`
 - **Essential Apps**: Chrome, Obsidian, VLC, Flameshot, and more
 - **7 Custom Wallpapers**: Professionally curated from Pexels
+- **GUI Installer**: Beautiful desktop interface with selection menus
 
 ### Optional Components (Your Choice)
 
@@ -46,6 +47,16 @@ During installation, you can select:
 - **Ollama**: Local LLM server for privacy-focused AI development
 - **Barrier**: Free KVM sharing for multi-computer setups
 
+### Extension System
+
+Bentobox features a powerful extension system that makes customization easy:
+
+- **Simple Metadata Format**: Add new applications with just a template file
+- **Automatic GUI Integration**: New extensions appear automatically in the installer
+- **Theme System**: Create and share custom themes with colors and wallpapers
+- **Ready-to-Use Templates**: Get started quickly with provided templates
+- **Community Sharing**: Easy to contribute and share extensions via pull requests
+
 ## 🚀 Quick Start
 
 Installation is simple - just run this one command on a fresh Ubuntu 24.04+ system:
@@ -54,13 +65,24 @@ Installation is simple - just run this one command on a fresh Ubuntu 24.04+ syst
 wget -qO- https://raw.githubusercontent.com/languageseed/bentobox/master/boot.sh | bash
 ```
 
-The installer will guide you through:
-1. Selecting optional applications
-2. Choosing programming languages
-3. Configuring Docker containers
-4. Setting up your development environment
+The GUI installer will guide you through:
+1. Selecting optional applications from an intuitive desktop interface
+2. Choosing programming languages you need
+3. Picking your preferred theme and wallpaper
+4. Configuring Docker containers (Portainer, OpenWebUI, Ollama)
+5. Setting up your development environment
 
 Installation takes 15-30 minutes depending on your selections.
+
+### Post-Installation
+
+After rebooting, you can:
+
+- **Access Portainer**: `http://localhost:9000` (create admin account on first visit)
+- **Access OpenWebUI**: `http://localhost:3000`
+- **Access Ollama** (if installed): `http://localhost:11434`
+- **Download AI Models**: `docker exec -it ollama ollama pull llama3.2`
+- **Set Up Tailscale**: `sudo tailscale up` (if installed)
 
 ## 💡 What Makes Bentobox Special?
 
@@ -82,6 +104,17 @@ With **OpenWebUI** included by default, you're ready to integrate AI into your w
 
 Optional **Tailscale** integration makes remote development seamless. Access your development environment securely from anywhere - your Portainer dashboard, web apps, even your clipboard sync with Barrier.
 
+### Highly Customizable
+
+The new **extension system** makes Bentobox incredibly flexible:
+
+- **Add New Applications**: Use simple templates to add any package
+- **Create Custom Themes**: Design your own color schemes and wallpapers
+- **Share Extensions**: Easy pull request workflow for community contributions
+- **Automatic Discovery**: Extensions appear automatically in the GUI installer
+
+Whether you want to add Slack, customize your terminal colors, or create a completely personalized setup, Bentobox's metadata-based extension system makes it straightforward.
+
 ### The LSW Experience: Windows Apps on Linux
 
 Here's where Bentobox really shines. The optional **WinBoat** feature creates what I call **Linux Subsystem for Windows (LSW)** - the reverse of Microsoft's WSL.
@@ -100,11 +133,23 @@ It's nothing revolutionary - just a VM with good integration. But WinBoat makes 
 ## 📚 Documentation & Support
 
 The repository includes comprehensive documentation:
-- Complete installation guide
-- Post-installation setup for AI models
-- Troubleshooting for common issues
-- WinBoat testing guides
-- Wallpaper licensing and credits
+
+- **Complete Installation Guide**: Step-by-step setup instructions
+- **GUI Guide**: Using the desktop installer interface
+- **Extension System Documentation**: Complete specs and developer guides
+- **Theme System**: Creating and customizing themes
+- **Post-Installation Setup**: Configuring AI models, Tailscale, WinBoat
+- **Troubleshooting Guide**: Common issues and solutions
+- **WinBoat Testing Guides**: Testing procedures and known issues
+- **Architecture Documentation**: Bentobox vs Omakub comparison
+- **Wallpaper Licensing**: Credits and licensing information
+
+### Known Issues & Workarounds
+
+The documentation covers known issues like:
+- Ulauncher crashes on first boot (cosmetic only, easily fixed)
+- GDM login screen background customization (Ubuntu 24.04 limitation)
+- Complete troubleshooting steps for Docker, Portainer, and containers
 
 ## 🙏 Credits & License
 
