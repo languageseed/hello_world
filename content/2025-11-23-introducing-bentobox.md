@@ -23,11 +23,11 @@ Bentobox is a thoughtfully curated Ubuntu setup (forked from [Omakub](https://gi
 The name reflects our philosophy: like a Japanese bento box, we've carefully selected quality tools over quantity, each serving a specific purpose, arranged thoughtfully in a beautiful container.
 
 <carousel>
-/images/2025-11-24-bentobox-1.png|Bentobox Desktop Interface|Beautiful curated Ubuntu desktop with modern wallpapers;
-/images/2025-11-24-bentobox-2.png|GUI Installer|Intuitive desktop installer for selecting applications and tools;
-/images/2025-11-24-bentobox-3.png|Theme Selection|Choose from multiple professionally curated themes;
-/images/2025-11-24-bentobox-4.png|Docker Integration|Portainer and OpenWebUI for container and AI management;
-/images/2025-11-24-bentobox-5.png|Development Environment|Modern editors and development tools ready to use
+/hello_world/images/2025-11-24-bentobox-1.png|Bentobox Desktop Interface|Beautiful curated Ubuntu desktop with modern wallpapers;
+/hello_world/images/2025-11-24-bentobox-2.png|GUI Installer|Intuitive desktop installer for selecting applications and tools;
+/hello_world/images/2025-11-24-bentobox-3.png|Theme Selection|Choose from multiple professionally curated themes;
+/hello_world/images/2025-11-24-bentobox-4.png|Docker Integration|Portainer and OpenWebUI for container and AI management;
+/hello_world/images/2025-11-24-bentobox-5.png|Development Environment|Modern editors and development tools ready to use
 </carousel>
 
 ## 🎯 Who Is This For?
