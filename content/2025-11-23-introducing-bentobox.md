@@ -10,7 +10,9 @@ tags: ["ubuntu", "linux", "desktop", "developer-tools", "windows-alternative", "
 
 > **Built on the shoulders of giants**: This project is inspired by and built upon [Omakub](https://omakub.org) by DHH and the ambitious [Omarchy](https://omarchy.org) project. We're grateful to the 37signals team for their vision of beautiful, opinionated Linux environments.
 
-Ubuntu is powerful, flexible, and free. But it has a reputation: too complex, too ugly, too much work to set up. [**Bentobox**](https://github.com/languageseed/bentobox) fixes that. 
+Ubuntu is powerful, flexible, and free. But it has a reputation: too complex, too ugly, too much work to set up. [**Bentobox**](https://github.com/languageseed/bentobox) fixes that.
+
+> "I made BentoBox to organize all of my build scripts and customization, and I find it useful—it saves me a lot of time. I'm not trying to build a company, I'm just sharing my knowledge and code in case it helps others." — Language Seed
 
 It's a **one-command Ubuntu setup** that gives you a beautiful, fully-configured desktop in 30 minutes—whether you're a developer who needs to rebuild environments quickly, an everyday user looking for a Windows/Mac alternative, or someone who wants Linux as their primary OS while keeping Windows available when needed.
 
