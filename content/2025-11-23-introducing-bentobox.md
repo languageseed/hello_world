@@ -42,7 +42,7 @@ The name reflects our philosophy: like a Japanese bento box, we've carefully sel
 - **Docker & Portainer**: Full container management UI at `localhost:9000`
 - **OpenWebUI**: AI chat interface at `localhost:3000`
 - **Essential Apps**: Chrome, Obsidian, VLC, Flameshot, and more
-- **7 Custom Wallpapers**: Professionally curated from Pexels
+- **60+ Premium Wallpapers**: Professionally curated from Unsplash and Pexels
 - **GUI Installer**: Beautiful desktop interface with selection menus
 
 ### Optional Components (Your Choice)
@@ -163,7 +163,9 @@ The documentation covers known issues like:
 
 Bentobox is released under the **MIT License** and is built on the excellent foundation of Omakub by DHH and contributors. Huge thanks to the original project for creating such a solid base to build upon.
 
-Special thanks to the Pexels photography community for the beautiful wallpapers included in the project.
+**Wallpapers**: Special thanks to the Unsplash and Pexels photography communities! Bentobox includes 60+ professionally curated wallpapers from 64 talented photographers:
+- Licensed under Unsplash License and Pexels License - free to use, modify, and distribute
+- Full credits and licensing details available in the repository's `wallpaper/LICENSE.md`
 
 ## 🔗 Get Started
 
