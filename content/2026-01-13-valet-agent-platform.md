@@ -98,7 +98,47 @@ flowchart TB
     D --> M
 ```
 
-The platform uses a **hexagonal architecture** - domain logic in the center, with adapters for APIs, storage, and LLM providers around the edges.
+### Hexagonal Architecture
+
+The platform uses a **hexagonal (ports & adapters) architecture**:
+
+```mermaid
+flowchart TB
+    subgraph Adapters["Adapters (Infrastructure)"]
+        direction TB
+        A1[FastAPI<br/>REST/SSE]
+        A2[SQLAlchemy<br/>PostgreSQL]
+        A3[Valet Runtime<br/>LLM Client]
+        A4[Milvus/Chroma<br/>Vector Store]
+    end
+    
+    subgraph Ports["Ports (Interfaces)"]
+        direction TB
+        P1[API Port]
+        P2[Storage Port]
+        P3[LLM Port]
+        P4[Embedding Port]
+    end
+    
+    subgraph Domain["Domain (Core Logic)"]
+        direction TB
+        D1[Agent Service]
+        D2[Memory Service]
+        D3[Skills Service]
+        D4[Task Service]
+    end
+    
+    A1 --> P1 --> D1
+    A2 --> P2 --> D2
+    A3 --> P3 --> D1
+    A4 --> P4 --> D2 & D3
+```
+
+- **Domain**: Pure business logic with no I/O dependencies
+- **Ports**: Abstract interfaces for external services
+- **Adapters**: Concrete implementations (PostgreSQL, FastAPI, etc.)
+
+This means I can swap PostgreSQL for SQLite for testing, or replace Valet Runtime with a mock—all without touching domain code.
 
 ---
 
@@ -121,24 +161,89 @@ The platform uses a **hexagonal architecture** - domain logic in the center, wit
 
 ---
 
+## Chat UI
+
+The platform includes a SvelteKit-based chat interface for interacting with agents:
+
+![Valet Agent Platform UI](/hello_world/images/valet-agent-ui.png)
+
+*Chat interface showing real-time tool execution and streaming responses*
+
+---
+
 ## Memory System
 
-The agent has three tiers of memory:
+The agent has four tiers of memory, each with different persistence and decay characteristics:
+
+```mermaid
+flowchart TB
+    subgraph Input["User Message"]
+        M[New Message]
+    end
+    
+    subgraph Retrieval["Memory Retrieval"]
+        direction LR
+        C[Core Memory<br/>Always loaded]
+        W[Working Memory<br/>Session scoped]
+        L[Long-term<br/>Vector search]
+        E[Episodic<br/>Time decayed]
+    end
+    
+    subgraph Assembly["Context Assembly"]
+        CTX[Assembled Context<br/>Token budget managed]
+    end
+    
+    M --> Retrieval
+    C --> CTX
+    W --> CTX
+    L -.->|Semantic match| CTX
+    E -.->|Relevance + recency| CTX
+    CTX --> LLM[LLM Call]
+```
+
+| Tier | Persistence | Decay | Use Case |
+|------|-------------|-------|----------|
+| **Core** | Permanent | None | User identity, preferences, key facts |
+| **Working** | Session | Cleared on end | Current task context, tool results |
+| **Long-term** | Permanent | Slow | Conversation history, retrieved semantically |
+| **Episodic** | Permanent | Time-based | Session events, fades over time |
+
+Memory retrieval is **budget-aware** - the system calculates how many tokens can be injected based on the model's context window (using the 25% rule from LSK principles).
+
+---
+
+## Skills System (LSK)
+
+Skills are structured knowledge units that enhance agent capabilities:
 
 ```mermaid
 flowchart LR
-    subgraph Memory["Memory Tiers"]
-        A[Core Memory<br/>Identity, preferences]
-        B[Working Memory<br/>Current task context]
-        C[Long-term Memory<br/>Past conversations]
+    subgraph Skills["Skill Registry"]
+        S1[Skill: Python Expert]
+        S2[Skill: Finance Domain]
+        S3[Skill: Code Review]
     end
     
-    A --> B --> C
+    subgraph Matching["Skill Matching"]
+        Q[User Query]
+        M{Match<br/>Engine}
+    end
+    
+    subgraph Injection["Context Injection"]
+        B[Budget<br/>Calculator]
+        CTX[Enhanced Context]
+    end
+    
+    Q --> M
+    S1 & S2 & S3 --> M
+    M -->|Top matches| B
+    B -->|Within budget| CTX
 ```
 
-- **Core**: Always loaded - user identity, preferences, key facts
-- **Working**: Current session context, recent tool results
-- **Long-term**: Searchable history, retrieved when relevant
+- Skills are registered with **activation patterns** (keywords, semantic similarity)
+- The system **dynamically calculates token budgets** based on model context windows
+- Skills inject expert knowledge, procedures, and examples into the prompt
+- Usage is tracked for analytics and optimization
 
 ---
 
@@ -173,7 +278,28 @@ Your UI can show progress bars, tool execution status, and partial responses as 
 
 ## Plugin System
 
-Extend the platform with plugins:
+The platform is designed around a **hook registry** that allows plugins to intercept and modify behavior at key points:
+
+```mermaid
+sequenceDiagram
+    participant UI as Chat UI
+    participant API as API Gateway
+    participant Hooks as Hook Registry
+    participant Agent as Agent Service
+    participant LLM as Valet Runtime
+    
+    UI->>API: Send message
+    API->>Hooks: on_request_start
+    Hooks->>Agent: Process
+    Agent->>Hooks: on_completion_start
+    Note over Hooks: Cache plugin checks cache
+    Hooks->>LLM: LLM call (if not cached)
+    LLM->>Hooks: Response
+    Hooks->>Hooks: on_completion_end
+    Note over Hooks: Cache plugin stores result
+    Hooks->>API: Final response
+    API->>UI: Stream back
+```
 
 ```python
 # Example: Add caching to all LLM calls
@@ -187,7 +313,27 @@ class CachePlugin(Plugin):
         await self.cache.set(params.hash, result)
 ```
 
-**Available plugins**: caching, rate limiting, metrics, logging, propulsion (auto-resume), autonomous mode.
+### Available Plugins
+
+| Plugin | Purpose |
+|--------|---------|
+| **Cache** | Avoid redundant LLM calls |
+| **Rate Limit** | Per-client request throttling |
+| **Metrics** | Prometheus-compatible metrics |
+| **Logging** | Structured request logging |
+| **Propulsion** | Auto-resume pending work |
+| **Autonomous** | Goal-driven multi-step execution |
+
+### Propulsion: Auto-Resume
+
+The **Propulsion Plugin** implements a simple but powerful principle:
+
+> *"If your hook has work, RUN IT."*
+
+On startup, the platform scans for paused or pending workflows and automatically resumes them. This means:
+- Interrupted tasks pick up where they left off
+- No orphaned sessions
+- Resilience to restarts
 
 ---
 
