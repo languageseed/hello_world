@@ -45,27 +45,38 @@
 <section class="relative overflow-hidden">
   <!-- Background effects -->
   <div class="absolute inset-0 bg-gradient-mesh" />
-  <div class="absolute inset-0 bg-grid opacity-30" />
   
-  <div class="relative max-w-7xl mx-auto px-6 py-20 md:py-32">
-    <div class="max-w-4xl mx-auto text-center stagger-children">
-      <!-- Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
-        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-        <span class="text-sm font-medium text-primary">Building AI Systems</span>
+  <div class="relative max-w-7xl mx-auto px-6 py-12 md:py-20">
+    <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+      <!-- Hero Image -->
+      <div class="flex-shrink-0 w-full md:w-1/2 flex justify-center">
+        <img 
+          src="{base}/images/helloworld-hero.jpg" 
+          alt="Hello World mascot" 
+          class="w-full max-w-md rounded-2xl shadow-2xl shadow-primary/20"
+        />
       </div>
       
-      <!-- Headline -->
-      <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-balance">
-        Welcome to
-        <span class="gradient-text-cyan"> Hello World</span>
-      </h1>
-      
-      <!-- Subheadline -->
-      <p class="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto text-balance">
-        Notes to self, articles and content to share with others. 
-        Documenting the journey of building AI infrastructure.
-      </p>
+      <!-- Text Content -->
+      <div class="flex-1 text-center md:text-left">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          <span class="text-sm font-medium text-primary">Building AI Systems</span>
+        </div>
+        
+        <!-- Headline -->
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance">
+          Welcome to
+          <span class="gradient-text-cyan"> Hello World</span>
+        </h1>
+        
+        <!-- Subheadline -->
+        <p class="text-lg md:text-xl text-foreground/90 max-w-xl text-balance">
+          Notes to self, articles and content to share with others. 
+          Documenting the journey of building AI infrastructure.
+        </p>
+      </div>
     </div>
   </div>
   
