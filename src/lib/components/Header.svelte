@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Github, Sprout, Pencil, Moon, Sun, Menu, X, Folder, BookOpen } from 'lucide-svelte';
+  import { Github, Sprout, Pencil, Moon, Sun, Menu, X, Folder, BookOpen, User } from 'lucide-svelte';
   import { base } from '$app/paths';
   import { browser } from '$app/environment';
   import { onMount } from 'svelte';
@@ -46,7 +46,7 @@
   const navLinks = [
     { href: `${base}/`, label: 'Portfolio', icon: Folder },
     { href: `${base}/blog`, label: 'Blog', icon: BookOpen },
-    { href: `${base}/merman`, label: 'Scratchpad', icon: Pencil },
+    { href: `${base}/about`, label: 'About', icon: User },
   ];
 </script>
 
