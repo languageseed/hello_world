@@ -15,23 +15,14 @@
     Calendar,
     User,
     ArrowRight,
-    Zap,
-    Layers,
-    Terminal,
     BookOpen
   } from 'lucide-svelte';
 
   export let data: PageData;
   
-  // Split posts into featured and others
+  // Split posts into featured and others (all remaining posts, sorted by date)
   $: featuredPost = data.posts[0];
-  $: otherPosts = data.posts.slice(1, 4);
-  
-  const stats = [
-    { value: '950K', label: 'Lines of Code', icon: Code },
-    { value: '55+', label: 'Containers', icon: Layers },
-    { value: '8', label: 'AI Projects', icon: Zap },
-  ];
+  $: otherPosts = data.posts.slice(1); // Show ALL other posts
   
   const features = [
     { icon: FileText, title: 'Markdown Support', description: 'Write in simple Markdown with full GFM support.' },
@@ -71,37 +62,10 @@
       </h1>
       
       <!-- Subheadline -->
-      <p class="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto mb-10 text-balance">
+      <p class="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto text-balance">
         Notes to self, articles and content to share with others. 
-        Documenting the journey of building production AI infrastructure.
+        Documenting the journey of building AI infrastructure.
       </p>
-      
-      <!-- Stats -->
-      <div class="flex flex-wrap justify-center gap-8 md:gap-12 mb-10">
-        {#each stats as stat}
-          <div class="text-center group">
-            <div class="flex items-center justify-center gap-2 mb-1">
-              <svelte:component this={stat.icon} class="w-5 h-5 text-primary" />
-              <span class="text-3xl md:text-4xl font-mono font-bold text-foreground group-hover:text-primary transition-colors">
-                {stat.value}
-              </span>
-            </div>
-            <span class="text-sm text-foreground/70">{stat.label}</span>
-          </div>
-        {/each}
-      </div>
-      
-      <!-- CTA Buttons -->
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="#posts" class="btn-primary">
-          <BookOpen class="w-4 h-4" />
-          Read Blog
-        </a>
-        <a href="{base}/merman" class="btn-secondary">
-          <Terminal class="w-4 h-4" />
-          Scratchpad
-        </a>
-      </div>
     </div>
   </div>
   
