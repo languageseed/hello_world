@@ -6,6 +6,7 @@ tags: [ai, search, federation, reranking, llm, python, fastapi, homelab]
 category: projects
 ---
 
+![Search Gateway](/hello_world/images/hero-search-gateway.png)
 
 # 🔍 Search Gateway
 

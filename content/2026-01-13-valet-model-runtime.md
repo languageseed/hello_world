@@ -6,6 +6,7 @@ tags: [ai, llm, inference, gateway, python, fastapi, ollama, docker, homelab]
 category: projects
 ---
 
+![Valet Model Runtime](/hello_world/images/hero-valet-model-runtime.png)
 
 # 🚀 Valet Model Runtime
 

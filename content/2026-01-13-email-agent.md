@@ -6,6 +6,7 @@ tags: [ai, email, llm, semantic-search, python, fastapi, homelab]
 category: projects
 ---
 
+![Email Agent](/hello_world/images/hero-email-agent.png)
 
 # 📧 Email Agent
 

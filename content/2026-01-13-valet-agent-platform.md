@@ -6,6 +6,7 @@ tags: [ai, agents, llm, python, fastapi, tools, orchestration, homelab]
 category: projects
 ---
 
+![Valet Agent Platform](/hello_world/images/hero-valet-agent-platform.png)
 
 # 🤖 Valet Agent Platform
 

@@ -6,6 +6,7 @@ tags: [ai, document-processing, pipeline, llm, python, fastapi, vision, homelab]
 category: projects
 ---
 
+![Content Processor](/hello_world/images/hero-content-processor.png)
 
 # 📄 Content Processor
 

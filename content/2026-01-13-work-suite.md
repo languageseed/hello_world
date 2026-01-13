@@ -6,6 +6,7 @@ tags: [productivity, ai, tools, javascript, nodejs, postgresql, homelab]
 category: projects
 ---
 
+![Work Suite](/hello_world/images/hero-work-suite.png)
 
 # 🧰 Work Suite
 
