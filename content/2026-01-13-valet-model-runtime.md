@@ -14,6 +14,8 @@ category: projects
 
 **Home Lab Setup** · **GPUs**: 2× RTX 5090 · **Throughput**: 1,320 req/s
 
+![Valet Gateway Dashboard](/images/valet-gateway-ui.png)
+
 ---
 
 ## The Problem

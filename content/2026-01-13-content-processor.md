@@ -14,6 +14,12 @@ category: projects
 
 **Home Lab Project** · **46 Modules** · **24 Pipelines** · **8 Content Types**
 
+![Content Processor Dashboard](/images/content-processor-1.png)
+
+![Content Processor Pipeline View](/images/content-processor-2.png)
+
+![Content Processor Document Analysis](/images/content-processor-3.png)
+
 ---
 
 ## The Problem
