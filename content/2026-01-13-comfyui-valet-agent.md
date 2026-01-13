@@ -87,8 +87,8 @@ flowchart LR
     end
     
     subgraph Storage
-        I[/shared/comfyui/output]
-        J[/shared/comfyui/models]
+        I[Output Directory]
+        J[Models Directory]
     end
     
     A -->|"Natural language"| B
