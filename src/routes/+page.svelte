@@ -1,44 +1,27 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { base } from '$app/paths';
-  import MarkdownContent from '$lib/components/MarkdownContent.svelte';
-  import {
-    FileText,
-    BarChart2,
-    Image as ImageIcon,
-    Music,
-    Code,
-    Palette,
-    Smartphone,
-    Rocket,
-    Sparkles,
-    Calendar,
-    User,
-    ArrowRight,
-    BookOpen
-  } from 'lucide-svelte';
+  import { Folder, Calendar, User, ArrowRight, BookOpen } from 'lucide-svelte';
 
   export let data: PageData;
   
-  // Split posts into featured and others (all remaining posts, sorted by date)
-  $: featuredPost = data.posts[0];
-  $: otherPosts = data.posts.slice(1); // Show ALL other posts
-  
-  const features = [
-    { icon: FileText, title: 'Markdown Support', description: 'Write in simple Markdown with full GFM support.' },
-    { icon: BarChart2, title: 'Mermaid Diagrams', description: 'Create flowcharts, sequence diagrams, and more.' },
-    { icon: ImageIcon, title: 'Image Support', description: 'Automatic responsive sizing and beautiful styling.' },
-    { icon: Music, title: 'Audio Players', description: 'Howler.js-powered players with full controls.' },
-    { icon: Code, title: 'Code Highlighting', description: 'Syntax highlighting for multiple languages.' },
-    { icon: Palette, title: 'Beautiful Design', description: 'Modern design with shadcn components.' },
-    { icon: Smartphone, title: 'Responsive', description: 'Looks great on desktop, tablet, and mobile.' },
-    { icon: Rocket, title: 'Static & Fast', description: 'Pre-rendered for blazing fast load times.' },
-  ];
+  // Filter only project posts (category: projects)
+  $: projectPosts = data.posts.filter(post => 
+    post.category === 'projects' || 
+    post.tags?.includes('projects') ||
+    post.slug?.includes('valet') ||
+    post.slug?.includes('agent') ||
+    post.slug?.includes('processor') ||
+    post.slug?.includes('gateway') ||
+    post.slug?.includes('vacuum') ||
+    post.slug?.includes('suite') ||
+    post.slug?.includes('comfyui')
+  );
 </script>
 
 <svelte:head>
-  <title>Hello World - Language Seed Blog</title>
-  <meta name="description" content="Notes to self, articles and content to share. Building AI systems and sharing knowledge." />
+  <title>Hello World - Language Seed</title>
+  <meta name="description" content="AI projects portfolio - Building AI infrastructure for my home lab" />
 </svelte:head>
 
 <!-- Hero Section -->
@@ -73,26 +56,17 @@
         
         <!-- Subheadline -->
         <p class="text-lg md:text-xl text-foreground/90 max-w-xl text-balance mb-8">
-          Notes to self, articles and content to share with others. 
-          Documenting the journey of building AI infrastructure.
+          A collection of AI infrastructure, agents, and tools built for my home lab environment.
         </p>
         
-        <!-- CTAs -->
-        <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-          <a 
-            href="{base}/portfolio" 
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-105 transition-all"
-          >
-            View Portfolio
-            <ArrowRight class="w-4 h-4" />
-          </a>
-          <a 
-            href="{base}/blog" 
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-secondary-foreground font-semibold border border-border hover:bg-secondary/80 transition-all"
-          >
-            Read Blog
-          </a>
-        </div>
+        <!-- CTA -->
+        <a 
+          href="{base}/blog" 
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-secondary-foreground font-semibold border border-border hover:bg-secondary/80 transition-all"
+        >
+          <BookOpen class="w-4 h-4" />
+          Read Blog
+        </a>
       </div>
     </div>
   </div>
@@ -101,168 +75,70 @@
   <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
 </section>
 
-<!-- Latest Posts Section -->
-<section id="posts" class="max-w-7xl mx-auto px-6 py-16">
-  <div class="section-header">
+<!-- Portfolio Grid -->
+<section class="max-w-7xl mx-auto px-6 py-12">
+  <div class="section-header mb-8">
     <div class="icon">
-      <BookOpen class="w-5 h-5" />
+      <Folder class="w-5 h-5" />
     </div>
-    <h2>Latest Posts</h2>
+    <h2>Projects</h2>
   </div>
-  
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Featured Post (Left - 2 columns) -->
-    {#if featuredPost && data.featuredPostContent}
-      <div class="lg:col-span-2">
-        <article class="card-interactive h-full">
-          <div class="border-b border-border pb-4 mb-6">
-            <h3 class="text-2xl md:text-3xl font-display font-bold mb-3">
-              <a href="{base}/posts/{featuredPost.slug}" class="hover:text-primary transition-colors">
-                {featuredPost.title}
-              </a>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {#each projectPosts as post}
+      <a href="{base}/posts/{post.slug}" class="group block">
+        <article class="card-interactive h-full flex flex-col overflow-hidden">
+          <!-- Hero Image -->
+          {#if post.slug}
+            <div class="aspect-video overflow-hidden bg-secondary/50">
+              <img 
+                src="{base}/images/hero-{post.slug.replace('2026-01-13-', '')}.png" 
+                alt={post.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                onerror="this.style.display='none'"
+              />
+            </div>
+          {/if}
+          
+          <!-- Content -->
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="font-display text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+              {post.title}
             </h3>
-            <div class="flex items-center gap-4 text-muted-foreground text-sm">
-              <span class="flex items-center gap-1.5">
-                <User class="w-4 h-4" />
-                {featuredPost.author}
+            
+            <div class="flex items-center gap-3 text-muted-foreground text-xs mb-3">
+              <span class="flex items-center gap-1">
+                <User class="w-3 h-3" />
+                {post.author}
               </span>
-              <span class="flex items-center gap-1.5">
-                <Calendar class="w-4 h-4" />
-                {featuredPost.date}
+              <span class="flex items-center gap-1">
+                <Calendar class="w-3 h-3" />
+                {post.date}
               </span>
             </div>
-          </div>
-          
-          <div class="prose prose-sm max-w-none">
-            <MarkdownContent content={data.featuredPostContent} />
+            
+            <p class="text-muted-foreground text-sm leading-relaxed line-clamp-3 flex-1 mb-4">
+              {post.excerpt}
+            </p>
+            
+            <!-- Tags -->
+            {#if post.tags && post.tags.length > 0}
+              <div class="flex flex-wrap gap-1 mb-4">
+                {#each post.tags.slice(0, 4) as tag}
+                  <span class="px-2 py-0.5 text-xs rounded-full bg-secondary text-secondary-foreground">
+                    {tag}
+                  </span>
+                {/each}
+              </div>
+            {/if}
+            
+            <span class="text-primary text-sm font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all mt-auto">
+              View Project
+              <ArrowRight class="w-4 h-4" />
+            </span>
           </div>
         </article>
-      </div>
-
-      <!-- Other Posts (Right - 1 column) -->
-      <div class="lg:col-span-1 space-y-6">
-        {#each otherPosts as post}
-          <a href="{base}/posts/{post.slug}" class="block group">
-            <article class="card-interactive">
-              <h4 class="font-display text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                {post.title}
-              </h4>
-              
-              <div class="flex items-center gap-4 text-muted-foreground text-xs mb-3">
-                <span class="flex items-center gap-1">
-                  <User class="w-3 h-3" />
-                  {post.author}
-                </span>
-                <span class="flex items-center gap-1">
-                  <Calendar class="w-3 h-3" />
-                  {post.date}
-                </span>
-              </div>
-              
-              <p class="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-4">
-                {post.excerpt}
-              </p>
-              
-              <span class="text-primary text-sm font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                Read more
-                <ArrowRight class="w-4 h-4" />
-              </span>
-            </article>
-          </a>
-        {/each}
-      </div>
-    {/if}
-  </div>
-</section>
-
-<!-- Quick Start Guide -->
-<section class="max-w-7xl mx-auto px-6 py-16">
-  <div class="card-modern p-8 md:p-10">
-    <div class="section-header mb-6">
-      <div class="icon">
-        <Rocket class="w-5 h-5" />
-      </div>
-      <h2>Quick Start Guide</h2>
-    </div>
-    
-    <div class="grid md:grid-cols-2 gap-8">
-      <div>
-        <ol class="space-y-4">
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-mono font-bold flex items-center justify-center">1</span>
-            <div>
-              <p class="font-medium">Create a markdown file</p>
-              <code class="text-sm text-muted-foreground">content/my-post.md</code>
-            </div>
-          </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-mono font-bold flex items-center justify-center">2</span>
-            <div>
-              <p class="font-medium">Add frontmatter</p>
-              <code class="text-sm text-muted-foreground">title, author, date</code>
-            </div>
-          </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-mono font-bold flex items-center justify-center">3</span>
-            <div>
-              <p class="font-medium">Write your content</p>
-              <code class="text-sm text-muted-foreground">Markdown + Mermaid</code>
-            </div>
-          </li>
-        </ol>
-      </div>
-      
-      <div>
-        <ol class="space-y-4" start="4">
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-mono font-bold flex items-center justify-center">4</span>
-            <div>
-              <p class="font-medium">Build the site</p>
-              <code class="text-sm text-muted-foreground">npm run build</code>
-            </div>
-          </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-mono font-bold flex items-center justify-center">5</span>
-            <div>
-              <p class="font-medium">Preview locally</p>
-              <code class="text-sm text-muted-foreground">npm run preview</code>
-            </div>
-          </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-mono font-bold flex items-center justify-center">6</span>
-            <div>
-              <p class="font-medium">Deploy</p>
-              <code class="text-sm text-muted-foreground">Push to GitHub Pages</code>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Features -->
-<section class="max-w-7xl mx-auto px-6 py-16">
-  <div class="section-header">
-    <div class="icon">
-      <Sparkles class="w-5 h-5" />
-    </div>
-    <h2>Features</h2>
-  </div>
-  
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
-    {#each features as feature}
-      <div class="card-interactive group">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 
-                    flex items-center justify-center mb-4
-                    group-hover:from-primary/30 group-hover:to-primary/10 transition-all">
-          <svelte:component this={feature.icon} class="w-6 h-6 text-primary" />
-        </div>
-        <h3 class="font-display font-semibold mb-2">{feature.title}</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          {feature.description}
-        </p>
-      </div>
+      </a>
     {/each}
   </div>
 </section>
