@@ -14,7 +14,7 @@ category: projects
 
 **Home Lab Project** · **Semantic Search** · **Conversation Summaries**
 
-![Email Agent UI](/images/email-agent-ui.png)
+![Email Agent UI](/hello_world/images/email-agent-ui.png)
 
 ---
 

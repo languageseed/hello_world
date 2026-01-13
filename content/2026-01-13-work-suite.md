@@ -14,11 +14,11 @@ category: projects
 
 **Home Lab Project** · **8 Apps** · **LLM-Compatible Formats**
 
-![Work Suite App 1](/images/worksuite-1.png)
+![Work Suite App 1](/hello_world/images/worksuite-1.png)
 
-![Work Suite App 2](/images/worksuite-2.png)
+![Work Suite App 2](/hello_world/images/worksuite-2.png)
 
-![Work Suite App 3](/images/worksuite-3.png)
+![Work Suite App 3](/hello_world/images/worksuite-3.png)
 
 ---
 

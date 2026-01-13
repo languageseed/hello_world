@@ -14,9 +14,9 @@ category: projects
 
 **Home Lab Project** · **15 Builtin Tools** · **Multi-tier Memory**
 
-![Valet Agent Chat Interface](/images/valet-agent-chat.png)
+![Valet Agent Chat Interface](/hello_world/images/valet-agent-chat.png)
 
-![Valet Agent Tool Execution](/images/valet-agent-tools.png)
+![Valet Agent Tool Execution](/hello_world/images/valet-agent-tools.png)
 
 ---
 
