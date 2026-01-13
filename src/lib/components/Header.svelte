@@ -45,8 +45,8 @@
   
   const navLinks = [
     { href: `${base}/`, label: 'Home', icon: Sprout },
-    { href: `${base}/`, label: 'Portfolio', icon: Folder },
-    { href: `${base}/`, label: 'Blog', icon: BookOpen },
+    { href: `${base}/portfolio`, label: 'Portfolio', icon: Folder },
+    { href: `${base}/blog`, label: 'Blog', icon: BookOpen },
     { href: `${base}/merman`, label: 'Scratchpad', icon: Pencil },
   ];
 </script>

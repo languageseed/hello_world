@@ -72,10 +72,27 @@
         </h1>
         
         <!-- Subheadline -->
-        <p class="text-lg md:text-xl text-foreground/90 max-w-xl text-balance">
+        <p class="text-lg md:text-xl text-foreground/90 max-w-xl text-balance mb-8">
           Notes to self, articles and content to share with others. 
           Documenting the journey of building AI infrastructure.
         </p>
+        
+        <!-- CTAs -->
+        <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+          <a 
+            href="{base}/portfolio" 
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-105 transition-all"
+          >
+            View Portfolio
+            <ArrowRight class="w-4 h-4" />
+          </a>
+          <a 
+            href="{base}/blog" 
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-secondary-foreground font-semibold border border-border hover:bg-secondary/80 transition-all"
+          >
+            Read Blog
+          </a>
+        </div>
       </div>
     </div>
   </div>

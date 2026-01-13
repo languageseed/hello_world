@@ -10,6 +10,8 @@ export interface Post {
   excerpt?: string;
   content: string;
   readingTime?: string;
+  category?: string;
+  tags?: string[];
 }
 
 export function getPosts(): Post[] {
@@ -44,7 +46,9 @@ export function getPosts(): Post[] {
         date: dateStr,
         excerpt: body.slice(0, 200).replace(/\n/g, ' ') + '...',
         content: body,
-        readingTime: stats.text
+        readingTime: stats.text,
+        category: data.category || undefined,
+        tags: data.tags || []
       };
     })
     .sort((a, b) => {
