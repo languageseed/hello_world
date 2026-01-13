@@ -6,7 +6,6 @@ tags: [ai, agents, llm, python, fastapi, tools, orchestration, homelab]
 category: projects
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial system.
 
 # 🤖 Valet Agent Platform
 

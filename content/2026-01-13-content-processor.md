@@ -6,7 +6,6 @@ tags: [ai, document-processing, pipeline, llm, python, fastapi, vision, homelab]
 category: projects
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial system.
 
 # 📄 Content Processor
 

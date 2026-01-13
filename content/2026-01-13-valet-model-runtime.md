@@ -6,7 +6,6 @@ tags: [ai, llm, inference, gateway, python, fastapi, ollama, docker, homelab]
 category: projects
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial or production system. Stats and benchmarks are from my specific hardware setup.
 
 # 🚀 Valet Model Runtime
 

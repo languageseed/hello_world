@@ -7,7 +7,6 @@ category: projects
 description: A unified API for speech-to-text, text-to-speech, voice cloning, and podcast generation with dynamic VRAM management.
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial system.
 
 # 🎙️ Valet Voice
 

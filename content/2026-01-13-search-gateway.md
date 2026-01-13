@@ -6,7 +6,6 @@ tags: [ai, search, federation, reranking, llm, python, fastapi, homelab]
 category: projects
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial system.
 
 # 🔍 Search Gateway
 

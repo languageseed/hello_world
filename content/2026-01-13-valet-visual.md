@@ -7,7 +7,6 @@ category: projects
 description: A unified API for object detection, document analysis, and image segmentation with dynamic GPU resource management.
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial system.
 
 # 👁️ Valet Visual
 

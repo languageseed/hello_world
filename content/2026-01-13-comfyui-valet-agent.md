@@ -7,7 +7,6 @@ category: projects
 description: An AI agent that wraps ComfyUI, enabling natural language image and video generation through conversational prompts.
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial system. Benchmarks and features reflect my specific hardware and use cases.
 
 # 🎨 ComfyUI Valet Agent
 

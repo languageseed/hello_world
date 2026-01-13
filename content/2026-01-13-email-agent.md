@@ -6,7 +6,6 @@ tags: [ai, email, llm, semantic-search, python, fastapi, homelab]
 category: projects
 ---
 
-> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial system.
 
 # 📧 Email Agent
 
