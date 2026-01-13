@@ -2,15 +2,17 @@
 title: "Valet Model Runtime - A Unified LLM Inference Gateway"
 author: Language Seed
 date: 2026-01-13
-tags: [ai, llm, inference, gateway, python, fastapi, ollama, docker]
+tags: [ai, llm, inference, gateway, python, fastapi, ollama, docker, homelab]
 category: projects
 ---
+
+> ⚠️ **Note**: This is a personal project running on my home development servers, not a commercial or production system. Stats and benchmarks are from my specific hardware setup.
 
 # 🚀 Valet Model Runtime
 
 > A drop-in OpenAI replacement that routes between local GPUs and cloud APIs
 
-**Status**: Production · **GPUs**: 2× RTX 5090 · **Throughput**: 1,320 req/s
+**Home Lab Setup** · **GPUs**: 2× RTX 5090 · **Throughput**: 1,320 req/s
 
 ---
 
@@ -127,9 +129,9 @@ The gateway itself adds minimal overhead. Most latency is in the LLM inference i
 
 ---
 
-## Production Setup
+## My Home Lab Setup
 
-Currently running a two-node cluster:
+Currently running on a two-node cluster in my home dev environment:
 
 | Node | Role | Hardware | VRAM |
 |------|------|----------|------|
