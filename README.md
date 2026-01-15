@@ -19,6 +19,7 @@ A modern portfolio and blog built with **SvelteKit**, **Tailwind CSS**, and **Lu
 
 - **Valet Model Runtime** - Unified LLM inference gateway for local and cloud models
 - **Valet Agent Platform** - AI agent framework with memory, skills, and tool integration
+- **Valet Video** - Real-time video & voice AI via WebRTC (SAM3, Moshi)
 - **Content Processor** - Document processing pipeline (46 modules, 24 pipelines)
 - **Search Gateway** - Federated search orchestrator with AI-powered query enhancement
 - **Vacuum** - Web scraping and knowledge ingestion for LLMs
