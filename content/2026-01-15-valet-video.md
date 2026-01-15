@@ -6,6 +6,8 @@ tags: [ai, computer-vision, webrtc, voice, real-time, python, fastapi, sam3, mos
 category: projects
 ---
 
+![Valet Video](/hello_world/images/hero-valet-video.png)
+
 # 🎬 Valet Video
 
 > Real-time webcam streaming with AI object detection, tracking, and voice interaction
@@ -182,6 +184,8 @@ Combinations optimized for specific scenarios:
 ## Browser Client
 
 The demo client provides a complete interface:
+
+![Valet Video UI](/hello_world/images/valet-video-ui.png)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
