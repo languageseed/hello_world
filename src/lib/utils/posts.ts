@@ -14,6 +14,58 @@ export interface Post {
   tags?: string[];
 }
 
+/**
+ * Extract a clean text excerpt from markdown content.
+ * Strips images, headers, blockquotes, links, and other markdown syntax.
+ */
+function extractExcerpt(markdown: string, maxLength: number = 160): string {
+  let text = markdown
+    // Remove images: ![alt](url)
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    // Remove links but keep text: [text](url) -> text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // Remove headers: # ## ### etc
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove blockquotes: > text
+    .replace(/^>\s+/gm, '')
+    // Remove bold/italic: **text** or *text* or __text__ or _text_
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')
+    .replace(/(\*|_)(.*?)\1/g, '$2')
+    // Remove inline code: `code`
+    .replace(/`([^`]*)`/g, '$1')
+    // Remove code blocks: ```...```
+    .replace(/```[\s\S]*?```/g, '')
+    // Remove horizontal rules: --- or ***
+    .replace(/^[-*]{3,}\s*$/gm, '')
+    // Remove HTML tags
+    .replace(/<[^>]*>/g, '')
+    // Remove emoji shortcodes like :emoji:
+    .replace(/:[a-z_]+:/g, '')
+    // Collapse multiple spaces/newlines
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  // Find the first meaningful sentence or paragraph
+  if (text.length > maxLength) {
+    // Try to cut at a sentence boundary
+    const cutoff = text.slice(0, maxLength);
+    const lastPeriod = cutoff.lastIndexOf('. ');
+    const lastQuestion = cutoff.lastIndexOf('? ');
+    const lastExclaim = cutoff.lastIndexOf('! ');
+    const lastSentence = Math.max(lastPeriod, lastQuestion, lastExclaim);
+    
+    if (lastSentence > maxLength * 0.5) {
+      text = text.slice(0, lastSentence + 1);
+    } else {
+      // Fall back to word boundary
+      const lastSpace = cutoff.lastIndexOf(' ');
+      text = text.slice(0, lastSpace > 0 ? lastSpace : maxLength) + '...';
+    }
+  }
+  
+  return text;
+}
+
 export function getPosts(): Post[] {
   const files = readdirSync('content');
   
@@ -44,7 +96,7 @@ export function getPosts(): Post[] {
         title: data.title || 'Untitled',
         author: data.author || 'Unknown',
         date: dateStr,
-        excerpt: body.slice(0, 200).replace(/\n/g, ' ') + '...',
+        excerpt: extractExcerpt(body),
         content: body,
         readingTime: stats.text,
         category: data.category || undefined,
