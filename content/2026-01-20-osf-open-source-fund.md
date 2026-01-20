@@ -30,6 +30,28 @@ OSF (Open Source Fund) is an educational simulation that demonstrates how AI cou
 
 ---
 
+## > Demo Video
+
+Watch the 3-minute walkthrough of OSF in action:
+
+<video controls width="100%" style="max-width: 800px; border-radius: 8px; margin: 1rem 0;">
+  <source src="/hello_world/media/osf-demo-video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+---
+
+## > Podcast: Simulating a Self-Healing Housing Market
+
+Listen to the deep-dive discussion on OSF's architecture and concepts:
+
+<audio controls style="width: 100%; max-width: 600px; margin: 1rem 0;">
+  <source src="/hello_world/media/osf-podcast.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
+
+---
+
 ## > Architecture
 
 ```mermaid
