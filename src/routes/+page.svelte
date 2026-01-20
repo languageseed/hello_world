@@ -92,7 +92,7 @@
           {#if post.slug}
             <div class="aspect-video overflow-hidden bg-secondary/50">
               <img 
-                src="{base}/images/hero-{post.slug.replace('2026-01-13-', '')}.png" 
+                src="{base}/images/hero-{post.slug.replace(/^\d{4}-\d{2}-\d{2}-/, '')}.png" 
                 alt={post.title}
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 onerror="this.style.display='none'"
